@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Расписание</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/*
+VOICE: копия экрана «Расписание» студенческого приложения, 1:1 по масштабу
+IDEA: нижний лист приложения с группой, неделей, днями и карточками пар
+PICTURE: список пар с висячими временами
+COLOUR and TYPE: тёмный сине-графитовый, голубой акцент; системный SF / Inter
+LAYOUT: колонка 395px, фиксированная нижняя панель
+*/
+:root{color-scheme:dark;--bg:#151c27;--card:#1d2738;--line:#2a3548;--ink:#f3f6fa;--mute:#8693a7;--soft:#c9d2de;--acc:#4f9de6;--pill:#263349;--bar:#0f141d}
+*{box-sizing:border-box;min-width:0}
+html,body{background:var(--bg)}
+body{margin:0;color:var(--ink);font:16px/1.3 -apple-system,"SF Pro Display","SF Pro Text",Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:focus-visible,textarea:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.app{max-width:430px;margin:0 auto;padding:20px 16px 130px}
+.tabs{display:flex;gap:16px;font-size:25px;font-weight:800;letter-spacing:-.4px;line-height:1.1}
+.tabs button{border:0;background:none;padding:0;font:inherit;color:#3d4b60;letter-spacing:inherit}.tabs button.on{color:var(--ink)}
+.who{display:block;border:0;background:none;padding:0;text-align:left;width:100%}.who u{display:block;text-decoration:none;color:#5aa3ec;font-size:13.5px;font-weight:600;margin-top:4px}
+.search{width:100%;height:46px;margin-top:18px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:16px inherit;font-family:inherit;padding:0 14px}
+.dep{margin-top:20px}.dep h4{margin:0 0 4px;font-size:16px;font-weight:700}.dep p{margin:0 0 10px;font-size:13px;color:var(--mute)}
+.ppl{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.pp{display:flex;justify-content:space-between;gap:12px;padding:11px 15px;border-top:1px solid var(--line);font-size:15px;width:100%;background:none;border-left:0;border-right:0;border-bottom:0;text-align:left}.pp:first-child{border-top:0}.pp span{color:var(--mute);font-size:13px;text-align:right;flex:none;max-width:45%}
+.pp.on{background:#22344d}.pp.on b{color:#7ab6f2}
+.cust{display:flex;gap:8px;margin-top:14px}.cust input{flex:1;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:16px inherit;font-family:inherit;padding:0 12px}.cust button{height:44px;padding:0 14px;border-radius:12px;border:0;background:var(--acc);color:#fff;font-weight:600}
+.src{margin-top:18px;font-size:12.5px;color:var(--mute);line-height:1.45}.src a{color:#5aa3ec}
+.hide{display:none}
+button.loc{border:0;font-family:inherit;cursor:pointer}
+.plan{position:fixed;inset:0;z-index:10;background:var(--bg);display:none;flex-direction:column}
+.plan.open{display:flex}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px 16px 14px;border-bottom:1px solid #263142;max-width:430px;width:100%;margin:0 auto}
+.ph h2{margin:0;font-size:22px;font-weight:800;letter-spacing:-.2px}
+.ph p{margin:6px 0 0;font-size:14px;color:var(--mute)}
+.px{width:43px;height:43px;border-radius:50%;border:0;background:#222c3b;display:grid;place-items:center;flex:none;margin-top:-4px}
+.pbody{position:relative;flex:1;max-width:430px;width:100%;margin:0 auto;overflow:hidden}
+.pchips{position:absolute;left:12px;right:12px;top:12px;z-index:2;display:flex;flex-direction:column;gap:8px;align-items:flex-start;pointer-events:none}
+.ppill{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:12px;background:#1d2738;border:1px solid #2a3548;color:#62a6ec;font-size:15px;font-weight:600;pointer-events:auto;max-width:100%}
+.ppill span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.floors{display:flex;gap:6px;flex-wrap:wrap;pointer-events:auto}
+.floors button{height:32px;padding:0 12px;border-radius:10px;border:1px solid #2a3548;background:#18202d;color:var(--mute);font-size:13.5px;font-weight:600}
+.floors button.on{background:#22344d;border-color:#3b6ea3;color:#cfe3fa}
+.psvg{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
+.psvg:active{cursor:grabbing}
+.zoom{position:absolute;right:12px;bottom:118px;display:flex;flex-direction:column;gap:8px;z-index:2}
+.zoom button{width:47px;height:47px;border-radius:12px;border:1px solid #2c3a4f;background:#1a2230;display:grid;place-items:center;color:var(--ink)}
+.pfoot{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:10px 12px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 22%)}
+.prow{display:flex;gap:8px}
+.prow input{flex:1;min-width:0;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:16px inherit;font-family:inherit;padding:0 12px}
+.pbtn{display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:#62a6ec;font-weight:600;font-size:14.5px;text-decoration:none;white-space:nowrap}
+.pbtn.ok{background:var(--acc);border-color:var(--acc);color:#fff}
+.pfoot p{margin:8px 2px 0;font-size:12px;line-height:1.4;color:var(--mute)}.pfoot a.cl{color:#5aa3ec}
+.where{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:4px 15px;margin-top:4px}
+.where div{padding:11px 0;border-top:1px solid var(--line)}.where div:first-child{border-top:0}
+.where small{display:block;font-size:12.5px;color:var(--mute);margin-bottom:2px}.where b{font-size:15.5px;font-weight:600}
+.map{display:flex;align-items:center;justify-content:center;gap:8px;height:46px;margin-top:12px;border-radius:14px;background:var(--pill);color:#62a6ec;font-weight:600;text-decoration:none}
+.grp{margin-top:18px;display:flex;align-items:center;gap:12px;width:100%;height:55px;padding:0 16px;background:var(--card);border:1px solid var(--line);border-radius:16px;text-align:left}
+.grp svg{flex:none;color:var(--acc)}
+.grp small{display:block;font-size:12px;color:var(--mute);line-height:1.15}
+.grp b{display:block;font-size:16.5px;font-weight:700;line-height:1.2}
+.grp i{margin-left:auto;color:var(--mute);font-style:normal;font-size:22px;font-weight:300}
+.week{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+.nav{width:43px;height:43px;border-radius:50%;border:1px solid #2c3a50;background:transparent;display:grid;place-items:center;flex:none;padding:0}
+.nav:disabled{border-color:transparent;background:#18202c;color:#4a576a;cursor:default}
+.wk{font-size:15px;font-weight:700;white-space:nowrap}
+.wk span{font-size:12px;font-weight:600;color:var(--mute);margin-left:6px}
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:14px}
+.day{height:61px;border:0;border-radius:12px;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0}
+.day small{font-size:13px;color:var(--mute)}
+.day b{font-size:19px;font-weight:700;color:var(--soft);line-height:1}
+.day.sel{background:#5a9fe2}.day.sel small{color:#dbeafb}.day.sel b{color:#fff}
+.day.today b{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px}
+.dh{margin:19px 0 0;font-size:15px;font-weight:700;color:#8e9ab0}
+.dc{margin:5px 0 0;font-size:14px;color:var(--mute)}
+.status{margin-top:14px;background:var(--card);border:1px solid #2c4364;border-radius:18px;padding:15px 15px 14px}
+.status b{display:block;font-size:15px;font-weight:700;line-height:1.25}
+.status span{display:block;margin-top:5px;font-size:13.5px;color:var(--mute)}
+.list{margin-top:17px}
+.row{display:grid;grid-template-columns:59px minmax(0,1fr);align-items:start}
+.t b{display:block;font-size:16px;font-weight:700;line-height:1.1;margin-top:8px}
+.t span{display:block;font-size:13px;color:var(--mute);margin-top:6px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.row.now .c{border-color:#3b6ea3}
+.cb{padding:17px 17px 15px}
+.c h3{margin:0;font-size:17px;font-weight:700;line-height:1.2}
+.c h3 em{font-style:normal;font-size:12.5px;font-weight:700;color:#e9a24a;margin-left:6px;white-space:nowrap}
+.tag{display:inline-flex;align-items:center;height:21px;margin-top:10px;padding:0 9px;border-radius:7px;font-size:12.5px;font-weight:600}
+.lec{background:#1f3452;color:#78b2ef}.pr{background:#1d3b2d;color:#5fd194}.ou{background:#3b2f22;color:#eda24c}
+.who{margin:10px 0 0;font-size:14.5px;color:var(--mute);line-height:1.3}
+.loc{display:inline-flex;align-items:center;gap:8px;height:36px;margin-top:14px;padding:0 13px;border-radius:17px;background:var(--pill);color:#62a6ec;font-size:14px;font-weight:600}
+.loc i{font-style:normal;color:#5d7aa0;font-size:18px;font-weight:400;margin-left:2px}
+.hw{margin:12px 0 0;padding:9px 11px;border-radius:12px;background:#17202e;font-size:13.5px;color:var(--soft);white-space:pre-wrap}
+.add{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:48px;border:0;border-top:1px solid var(--line);background:transparent;color:#5aa3ec;font-size:14.5px;font-weight:600}
+.add svg{flex:none}
+.ed{padding:12px 17px 15px;border-top:1px solid var(--line)}
+.ed textarea{width:100%;min-height:76px;resize:vertical;background:#17202e;border:1px solid var(--line);border-radius:12px;color:var(--ink);font:16px/1.35 inherit;font-family:inherit;padding:10px 12px}
+.ed div{display:flex;gap:8px;margin-top:8px;justify-content:flex-end}
+.ed button{height:38px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:transparent;font-size:15px;font-weight:600}
+.ed button.ok{background:var(--acc);border-color:var(--acc);color:#fff}
+.brk{display:flex;align-items:center;gap:14px;margin:16px 0;font-size:13px;color:var(--mute);white-space:nowrap}
+.brk::before,.brk::after{content:"";flex:1;height:1px;background:#283346}
+.brk.cur{color:#5aa3ec}.brk.cur::before,.brk.cur::after{background:#2f5a88}
+.empty{margin-top:17px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 17px;text-align:center;color:var(--mute);font-size:15px}
+.empty b{display:block;color:var(--ink);font-size:18px;margin-bottom:4px}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:3;display:flex;justify-content:center}
+.bar>div{width:100%;max-width:430px;background:var(--bar);border:1px solid #1e2734;border-bottom:0;border-radius:26px 26px 0 0;padding:16px 14px calc(14px + env(safe-area-inset-bottom))}
+.handle{width:37px;height:4px;border-radius:2px;background:#3a4658;margin:-8px auto 12px}
+.btns{display:flex;gap:8px;align-items:center}
+.ic{width:47px;height:47px;border-radius:50%;background:#1d2533;display:grid;place-items:center;color:#8ea9d0;flex:none;border:0;padding:0}
+.main{flex:1;height:47px;border-radius:24px;border:0;background:#4f97dd;color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:16.5px;font-weight:700}
+.sheet{position:fixed;inset:0;background:rgba(4,8,14,.6);display:none;align-items:flex-end;justify-content:center;z-index:9}
+.sheet.open{display:flex}
+.panel{background:var(--bg);width:100%;max-width:430px;border-radius:26px 26px 0 0;padding:14px 16px 28px;max-height:88vh;overflow:auto}
+.panel h2{margin:6px 0 0;font-size:24px;font-weight:800}
+.panel p{margin:16px 0 8px;color:var(--mute);font-size:14px}
+.gg{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.gg button{height:46px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-size:17px;font-weight:700}
+.gg button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.note{font-size:12.5px;line-height:1.45;color:var(--mute);margin-top:18px}
+.x{float:right;width:38px;height:38px;border-radius:50%;border:0;background:var(--card);font-size:18px}
+</style>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+<div class="app">
+  <div class="tabs"><button id="tabG" class="on">Группы</button><button id="tabT">Преподаватели</button></div>
+<div id="viewG">
+  <button class="grp" id="grpBtn" aria-haspopup="dialog">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="7.5" r="3.3"/><path d="M2.8 19.5c.4-3.6 2.9-5.6 6.2-5.6s5.8 2 6.2 5.6"/><circle cx="17.2" cy="8.6" r="2.6"/><path d="M16.8 13.9c2.6.2 4.2 2.1 4.5 5"/></svg>
+    <div><small>Группа</small><b id="grpName">Группа 1</b></div><i>›</i>
+  </button>
+  <div class="week">
+    <button class="nav" id="prev" aria-label="Предыдущая неделя"><svg width="12" height="18" viewBox="0 0 12 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2 2.5 9 9 16"/></svg></button>
+    <div class="wk"><span id="wkRange" style="margin:0;font-size:15px;font-weight:700;color:var(--ink)"></span><span id="wkNum"></span></div>
+    <button class="nav" id="next" aria-label="Следующая неделя"><svg width="12" height="18" viewBox="0 0 12 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 2 6.5 7L3 16"/></svg></button>
+  </div>
+  <div class="days" id="days"></div>
+  <p class="dh" id="dh"></p><p class="dc" id="dc"></p>
+  <div id="status"></div>
+  <div class="list" id="list"></div>
+</div>
+<div id="viewT" class="hide"><input class="search" id="q" placeholder="Поиск по фамилии или предмету" autocomplete="off"><div id="tlist"></div><p class="src">Составы кафедр — со страниц кафедр на ngmu.ru; аудитории — из справки о материально-техническом обеспечении программы 31.05.03 Стоматология (new.ngmu.ru). Проверено 23.11.2026. Кто ведёт конкретную группу, университет публично не указывает: выберите своего преподавателя в карточке пары.</p></div>
+</div>
+<div class="bar"><div><div class="handle"></div><div class="btns">
+  <span class="ic" aria-hidden="true"><svg width="16" height="20" viewBox="0 0 20 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="1.5" width="14" height="21" rx="3"/><path d="M8 18.5h4" stroke-linecap="round"/></svg></span>
+  <button class="main" id="today"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"/><path d="M3 10h18M8 2.5v4M16 2.5v4"/></svg>Расписание</button>
+  <span class="ic" aria-hidden="true"><svg width="20" height="18" viewBox="0 0 24 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M2 4.5 8.5 2l7 2.5L22 2v15.5L15.5 20l-7-2.5L2 20z"/><path d="M8.5 2v15.5M15.5 4.5V20"/></svg></span>
+  <span class="ic" aria-hidden="true"><svg width="20" height="18" viewBox="0 0 24 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 8.5v5h3l9 5.5V3L6 8.5z"/><path d="M18.5 7.5a5 5 0 0 1 0 7" stroke-linecap="round"/></svg></span>
+</div></div></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Выбор группы">
+  <div class="panel"><div class="handle" style="margin:0 auto 6px"></div><button class="x" id="close" aria-label="Закрыть">✕</button><h2>Группа</h2>
+    <p>Стоматология, 1 курс · I поток</p><div class="gg" id="g1"></div>
+    <p>II поток</p><div class="gg" id="g2"></div>
+    <div class="note">Перенесено со скана расписания (31.05.03 «Стоматология», 1 курс, 1 семестр 2026–2027). Занятия 01.09–30.12.2026 и 09.01–16.01.2027, зачётные дни 18.01–23.01, каникулы 25.01–31.01. Недели считаются от 31.08.2026, 1-я — нечётная. Аудитории — из справки МТО НГМУ по программе 31.05.03; конкретную аудиторию группы университет не публикует. Факультатив «Русский язык как иностранный» — по расписанию кафедры.</div>
+  </div>
+</div>
+<div class="sheet" id="tsheet" role="dialog" aria-modal="true" aria-label="Выбор преподавателя"><div class="panel"><div class="handle" style="margin:0 auto 6px"></div><button class="x" id="tclose" aria-label="Закрыть">✕</button><h2 id="tTitle">Преподаватель</h2><p id="tSub"></p><div class="ppl" id="tpick"></div><div class="cust"><input id="tCustom" placeholder="Другой преподаватель"><button id="tSave">Готово</button></div><p class="src" id="tReset"></p></div></div>
+<div class="plan" id="lsheet" role="dialog" aria-modal="true" aria-label="Схема этажа">
+ <div class="ph"><div><h2 id="lTitle">ЛК · этаж 4</h2><p id="lSub"></p></div><button class="px" id="lclose" aria-label="Закрыть"><svg width="22" height="22" viewBox="0 0 22 22" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 4l14 14M18 4 4 18"/></svg></button></div>
+ <div class="pbody"><div class="pchips"><span class="ppill" id="lPill"></span><div id="lFloors" class="floors"></div></div>
+  <svg id="plan" class="psvg" xmlns="http://www.w3.org/2000/svg"><g id="pg"></g></svg>
+  <div class="zoom"><button id="zIn" aria-label="Приблизить"><svg width="22" height="22" viewBox="0 0 22 22" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M11 3v16M3 11h16"/></svg></button><button id="zOut" aria-label="Отдалить"><svg width="22" height="22" viewBox="0 0 22 22" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 11h16"/></svg></button><button id="zFit" aria-label="Показать целиком"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 8V3h5M14 3h5v5M19 14v5h-5M8 19H3v-5"/></svg></button></div>
+  <div class="pfoot"><div class="prow"><a class="pbtn" id="lMap" href="#" target="_blank" rel="noopener">Яндекс Карты</a><input id="lCustom" placeholder="Своя аудитория" inputmode="text"><button class="pbtn ok" id="lSave">Сохранить</button></div><p id="lNote"></p></div>
+ </div>
+</div>
+<script>
+{
+const S={
+ 'А':['Анатомия','Кафедра анатомии человека','ЛК'],
+ 'Б':['Биология','Кафедра медицинской генетики и биологии','ЛК'],
+ 'Х':['Химия','Кафедра медицинской химии','ЛК'],
+ 'ИР':['История России','Кафедра социально-исторических наук','УК №6'],
+ 'Я':['Иностранный язык','Кафедра лингвистики и межкультурной коммуникации','УК №5'],
+ 'Ял':['Латинский язык','Кафедра лингвистики и межкультурной коммуникации','УК №5'],
+ 'БЖ':['Безопасность жизнедеятельности','Кафедра нормальной физиологии и основ БЖ','УК №6'],
+ 'Инф':['Медицинская информатика','Кафедра математики','ЛК'],
+ 'Фк':['Физическая культура и спорт','Кафедра физического воспитания',''],
+ 'Пс':['Психология межличностной коммуникации','Психологическая безопасность',''],
+ 'ОУ':['Основы ухода за больными','Учебная практика · сестринское дело','']
+};
+// пары: [начало, конец первой половины, начало второй, конец]
+const T={"А": [["Елясин Павел Александрович", "заведующий кафедрой, доцент"], ["Аристова Елена Серафимовна", "доцент"], ["Борисова Ольга Александровна", "старший преподаватель"], ["Васильева Ольга Владиславовна", "доцент"], ["Воробьёва Анна Николаевна", "преподаватель"], ["Голубева Ирина Александровна", "профессор"], ["Казакова Василиса Владимировна", "преподаватель"], ["Коровяков Артем Станиславович", "преподаватель"], ["Литвинова Тамара Александровна", "профессор"], ["Машак Александр Николаевич", "профессор"], ["Овсянко Елена Владимировна", "профессор"], ["Решетняк Юлия Геннадьевна", "доцент"], ["Рябцева Анастасия Александровна", "старший преподаватель"], ["Шурина Наталья Альбертовна", "старший преподаватель"]], "Б": [["Максимова Юлия Владимировна", "заведующий кафедрой"], ["Васильева Мария Александровна", "ассистент"], ["Гарный Владимир Евгеньевич", "старший преподаватель"], ["Качкин Константин Вячеславович", "доцент"], ["Максимов Владимир Николаевич", "профессор"], ["Минних Софья Владимировна", "преподаватель"], ["Мурзаханова Наталья Андреевна", "преподаватель"], ["Рублев Максим Григорьевич", "доцент"], ["Якутин Михаил Владимирович", "профессор"], ["Ясакова Наталья Тихоновна", "профессор"]], "Х": [["Суменкова Дина Валерьевна", "заведующий кафедрой, доцент"], ["Гошко Наталья Валерьевна", "ассистент"], ["Долганова Ольга Михайловна", "доцент"], ["Ким Надежда Олеговна", "доцент"], ["Леберфарб Елена Юрьевна", "доцент"], ["Пашкова Леся Владимировна", "старший преподаватель"], ["Сычева Ирина Михайловна", "доцент"], ["Терах Елена Игоревна", "доцент"], ["Тюрина Елена Эдуардовна", "старший преподаватель"], ["Хвостикова Марина Александровна", "старший преподаватель"], ["Шарапов Виктор Иванович", "профессор"]], "ИР": [["Николаева Ирина Ивановна", "заведующий кафедрой"], ["Анурина Кристина Александровна", "преподаватель"], ["Борисенко Андрей Андреевич", "старший преподаватель"], ["Вишневский Станислав Олегович", "старший преподаватель"], ["Павлова Елена Юрьевна", "доцент"], ["Путилова Ирина Владиленовна", "доцент"], ["Сиваченко Оксана Юрьевна", "старший преподаватель"], ["Федина Наталья Григорьевна", "доцент"], ["Цепелева Надежда Валерьевна", "доцент"], ["Шаболдин Максим Александрович", "преподаватель"]], "Я": [["Извекова Татьяна Федоровна", "заведующий кафедрой"], ["Алексеева Ирина Семеновна", "старший преподаватель"], ["Ананьева Ульяна Васильевна", "преподаватель"], ["Бессонова Анастасия Алексеевна", "преподаватель"], ["Бондарева Татьяна Николаевна", "преподаватель"], ["Герцог Ольга Алексеевна", "старший преподаватель"], ["Дьяков Анатолий Иванович", "профессор"], ["Захидова Лариса Сергеевна", "старший преподаватель"], ["Иванова Анна Дмитриевна", "преподаватель"], ["Каратаев Денис Михайлович", "преподаватель"], ["Кошелева Юлия Станиславовна", "преподаватель"], ["Краснова Ольга Александровна", "доцент"], ["Купченко Юлия Александровна", "старший преподаватель"], ["Левчук Карина Анатольевна", "старший преподаватель"], ["Лисица Анна Викторовна", "старший преподаватель"], ["Медникова Галина Анатольевна", "старший преподаватель"], ["Попова Ирина Владимировна", "старший преподаватель"], ["Реморова Елена Ефимовна", "преподаватель"], ["Свиридович Елена Юрьевна", "старший преподаватель"], ["Сергеева Юлия Алексеевна", "преподаватель"], ["Сикацкая Полина Алексеевна", "старший преподаватель"], ["Токарева Лариса Владимировна", "старший преподаватель"], ["Черединова Ольга Витальевна", "старший преподаватель"], ["Шабалина Лариса Александровна", "старший преподаватель"], ["Широких Алексей Александрович", "старший преподаватель"]], "БЖ": [["Ставский Евгений Александрович", "заведующий кафедрой"], ["Амстиславская Тамара Геннадьевна", "профессор"], ["Арчибасова Елена Алексеевна", "доцент"], ["Вечкапова Светлана Олеговна", "преподаватель"], ["Григорьев Илья Владимирович", "доцент"], ["Дружинин Владимир Юрьевич", "доцент"], ["Ермаченко Максим Александрович", "старший преподаватель"], ["Зинченко Маргарита Ивановна", "преподаватель"], ["Зыков Сергей Вениаминович", "доцент"], ["Карпов Николай Владимирович", "преподаватель"], ["Крылова Ирина Федоровна", "старший преподаватель"], ["Ланшаков Дмитрий Александрович", "доцент"], ["Роман Ганна Николаевна", "преподаватель"], ["Ханагян Татьяна Александровна", "доцент"], ["Цареградская Елена Александровна", "преподаватель"]], "Инф": [["Постникова Ольга Алексеевна", "заведующий кафедрой"], ["Артемьева Алла Николаевна", "преподаватель"], ["Константиновская Наталья Валерьевна", "старший преподаватель"], ["Михайлова Наталья Александровна", "старший преподаватель"], ["Рассказова Наталья Васильевна", "старший преподаватель"], ["Ромашкина Елена Петровна", "старший преподаватель"], ["Фролова Юлия Борисовна", "преподаватель"], ["Шабанова Ирина Алексеевна", "преподаватель"]], "Фк": [["Головнёва Наталья Валерьевна", "старший преподаватель"], ["Даниленко Надежда Алексеевна", "старший преподаватель"], ["Жданович Наталья Ивановна", "старший преподаватель"], ["Ильичёва Наталья Юрьевна", "старший преподаватель"], ["Кокшаров Андрей Витальевич", "старший преподаватель"], ["Корнилов Олег Геннадьевич", "старший преподаватель"], ["Котельников Виталий Михайлович", "преподаватель"], ["Митрохин Евгений Александрович", "доцент"], ["Мухаметов Наиль Шамильевич", "старший преподаватель"], ["Панфёров Михаил Семенович", "преподаватель"], ["Сергеев Георгий Геннадьевич", "старший преподаватель"], ["Степкин Егор Викторович", "преподаватель"], ["Теплухин Евгений Иванович", "доцент"], ["Шукшина Ирина Вадимовна", "старший преподаватель"]], "Пс": [["Гриневецкая Татьяна Николаевна", "заведующий кафедрой, доцент"], ["Ауман Екатерина Александровна", "старший преподаватель"], ["Гуляевская Наталья Вениаминовна", "доцент"], ["Кирсанова Юлия Юрьевна", "старший преподаватель"], ["Корчуганов Вадим Анатольевич", "старший преподаватель"], ["Парфенова Зоя Анатольевна", "доцент"], ["Рассихина Маргарита Алексеевна", "старший преподаватель"], ["Севостьянов Дмитрий Анатольевич", "профессор"], ["Семенченко Ирина Витальевна", "доцент"], ["Тихонова Антонина Юрьевна", "старший преподаватель"], ["Шпикс Татьяна Александровна", "доцент"]], "ОУ": [["Дробышева Татьяна Александровна", "заведующий кафедрой, доцент"], ["Арутюнян Ирина Владимировна", "преподаватель"], ["Дробышев Виктор Анатольевич", "профессор"], ["Жданова Ирина Викторовна", "ассистент"], ["Зотова Лариса Геннадьевна", "ассистент"], ["Каравозова Анастасия Евгеньевна", "ассистент"], ["Климчук Татьяна Владимировна", "ассистент"], ["Кондратьева Елена Анатольевна", "ассистент"], ["Куликова Наталья Виталиевна", "старший преподаватель"], ["Оснач Ирина Александровна", "ассистент"], ["Ренжина Елена Николаевна", "ассистент"], ["Токарева Ирина Ивановна", "ассистент"]]};
+T['Ял']=T['Я'];
+const B={ЛК:['Лабораторный корпус','ул. Залесского, 4'],УК6:['Учебный корпус №6','ул. Медкадры, 6'],УК5:['Учебный корпус №5','ул. Медкадры, 5'],ГК:['Главный корпус','Красный проспект, 52'],ГКБ12:['ГКБ №12','ул. Трикотажная, 49/1'],ГИКБ1:['ГИКБ №1','ул. О. Жилиной, 90а']};
+const LOC={
+ 'А':{b:'ЛК',short:'ЛК · ауд. 210–244',rooms:'210, 211 (зал), 237–244'},
+ 'Б':{b:'ЛК',short:'ЛК · ауд. 513, 514, 530',rooms:'513, 514, 530'},
+ 'Х':{b:'ЛК',short:'ЛК · ауд. 401–445',rooms:'401, 402, 441, 443–445; лаборатории 403, 448, 451'},
+ 'ИР':{b:'УК6',short:'УК №6 · ауд. 222',rooms:'222'},
+ 'Я':{b:'УК5',short:'УК №5 · ауд. 104–109, 303–317',rooms:'104, 105, 107–109, 303, 304, 306, 308–317'},
+ 'Ял':{b:'УК5',short:'УК №5 · ауд. 104–109, 303–317',rooms:'104, 105, 107–109, 303, 304, 306, 308, 315–317'},
+ 'БЖ':{b:'УК6',short:'УК №6 · ауд. 120, 319',rooms:'120, 319; лекционная 328'},
+ 'Инф':{b:'ЛК',short:'ЛК · ауд. 516, 519, 535',rooms:'516, 519, 535 (компьютерные классы)'},
+ 'Фк':{b:'УК5',short:'УК №5 · ауд. 1',rooms:'УК №5, ауд. 1; спортзал №222 — Главный корпус, Красный проспект, 52'},
+ 'Пс':{b:'УК5',short:'УК №5 · ауд. 202, 209',rooms:'202, 209'},
+ 'ОУ':{b:'ГКБ12',short:'ГКБ №12 · ауд. 1–3',rooms:'ГКБ №12 (ул. Трикотажная, 49/1), ауд. 1–3; ГИКБ №1 (ул. О. Жилиной, 90а), ауд. 1'}
+};
+const R=(a,b)=>Array.from({length:b-a+1},(_,i)=>a+i);
+const LF={
+ 'А':[{b:'ЛК',f:2,rooms:[210,211,...R(237,244)]}],
+ 'Б':[{b:'ЛК',f:5,rooms:[513,514,530]}],
+ 'Х':[{b:'ЛК',f:4,rooms:[401,402,403,441,443,444,445,448,451]}],
+ 'ИР':[{b:'УК6',f:2,rooms:[222]}],
+ 'Я':[{b:'УК5',f:3,rooms:[303,304,306,...R(308,317)]},{b:'УК5',f:1,rooms:[104,105,107,108,109]}],
+ 'Ял':[{b:'УК5',f:3,rooms:[303,304,306,308,315,316,317]},{b:'УК5',f:1,rooms:[104,105,107,108,109]}],
+ 'БЖ':[{b:'УК6',f:1,rooms:[120]},{b:'УК6',f:3,rooms:[319,328]}],
+ 'Инф':[{b:'ЛК',f:5,rooms:[516,519,535]}],
+ 'Фк':[{b:'УК5',f:0,rooms:[1]},{b:'ГК',f:2,rooms:[222]}],
+ 'Пс':[{b:'УК5',f:2,rooms:[202,209]}],
+ 'ОУ':[{b:'ГКБ12',f:0,rooms:[1,2,3]},{b:'ГИКБ1',f:0,rooms:[1]}]
+};
+const BS={ЛК:'ЛК',УК6:'УК №6',УК5:'УК №5',ГК:'Главный корпус',ГКБ12:'ГКБ №12',ГИКБ1:'ГИКБ №1'};
+const P={1:['09:00','09:45','09:55','10:40'],2:['11:00','11:45','11:55','12:40'],3:['13:30','14:15','14:25','15:10'],4:['15:20','16:05','16:15','17:00']};
+const L={1:['14:00','14:45','14:55','15:40'],2:['16:00','16:45','16:55','17:40']};
+const D=[[],[],[],[],[],[]];
+const c=(d,g,p,s,w=0)=>D[d].push({g,p,s,w});
+const alt=(d,g,p,se,so)=>{c(d,g,p,se,2);c(d,g,p,so,1)};
+const inf=(d,ge,go,p)=>{c(d,[ge],[p],'Инф',2);c(d,[go],[p],'Инф',1)};
+const lec=(d,st,slot,s,wk,room)=>D[d].push({lec:1,st,slot,s,wk,room});
+const O15=[3,5,7,9,11,13,15],E1=[2,6,10,14],E2=[4,8,12,16],EV=[2,4,6,8,10,12],OD=[3,5,7,9,11];
+// Пн
+c(0,[1,2],[1,2],'А');c(0,[3,4],[1,2],'Б');c(0,[5,6],[1,2],'Х');alt(0,[7,8],[1,2],'ОУ','БЖ');
+c(0,[9,10],[1],'ИР');c(0,[9,10],[2],'Пс');c(0,[11,12],[1],'Я');c(0,[11,12],[2],'Ял');
+lec(0,1,1,'А',O15,'Зал №2 ЛК');lec(0,1,1,'Инф',E1,'Зал №2 ЛК');lec(0,1,1,'Б',E2,'Зал №2 ЛК');lec(0,1,2,'БЖ',[2,3,4,5],'Зал №2 ЛК');
+c(0,[15,16],[1],'Пс');alt(0,[17,18],[1,2],'БЖ','ОУ');c(0,[13,14],[2],'Я');c(0,[15,16],[2],'ИР');
+c(0,[13,14],[3,4],'А');c(0,[15,16],[3,4],'Б');c(0,[17,18],[3,4],'А');c(0,[19,20],[3,4],'Х');c(0,[21,22],[3],'Ял');inf(0,21,22,4);
+// Вт
+c(1,[1,2],[1],'А');c(1,[3,4],[1],'ИР');c(1,[5,6],[1,2],'А');c(1,[7,8],[1,2],'Б');c(1,[9,10],[1,2],'Х');c(1,[11,12],[1],'Фк');
+c(1,[1,2],[2],'ИР');c(1,[3,4],[2],'Ял');c(1,[11,12],[2],'А');
+alt(1,[1,2],[3,4],'ОУ','БЖ');c(1,[3,4],[3,4],'А');c(1,[5,6],[3],'Ял');c(1,[7,8],[3,4],'Х');c(1,[9,10],[3],'Я');inf(1,9,10,4);alt(1,[11,12],[3,4],'БЖ','ОУ');
+c(1,[15,16],[1],'Я');inf(1,17,18,1);c(1,[19,20],[1],'Пс');alt(1,[21,22],[1,2],'БЖ','ОУ');
+c(1,[13,14],[2],'Пс');inf(1,15,16,2);c(1,[17,18],[2],'Ял');c(1,[19,20],[2],'Фк');
+lec(1,2,1,'А',O15,'Зал №2 ЛК');lec(1,2,1,'БЖ',E1,'Зал №2 ЛК');lec(1,2,1,'Б',E2,'Зал №2 ЛК');lec(1,2,2,'Инф',[3,5,7,9],'Зал №2 ЛК');lec(1,2,2,'Фк',[2],'Зал №2 ЛК');
+// Ср
+c(2,[1,2],[1,2],'Х');alt(2,[3,4],[1,2],'ОУ','БЖ');c(2,[5,6],[1],'ИР');inf(2,7,8,1);inf(2,5,6,2);c(2,[7,8],[2],'Пс');c(2,[11,12],[1,2],'А');
+c(2,[1,2],[3,4],'Б');c(2,[3,4],[3],'А');c(2,[5,6],[3],'Фк');c(2,[9,10],[3,4],'А');c(2,[11,12],[3],'Пс');c(2,[3,4],[4],'Фк');
+alt(2,[13,14],[1,2],'БЖ','ОУ');c(2,[15,16],[2],'Ял');c(2,[17,18],[1,2],'Б');c(2,[19,20],[1],'Я');c(2,[19,20],[2],'ИР');c(2,[21,22],[2],'Я');
+c(2,[13,14],[3,4],'Х');c(2,[15,16],[3,4],'А');c(2,[17,18],[3],'ИР');alt(2,[19,20],[3,4],'БЖ','ОУ');c(2,[21,22],[3,4],'Б');
+// Чт
+c(3,[3,4],[1,2],'Х');alt(3,[5,6],[1,2],'БЖ','ОУ');c(3,[7,8],[1,2],'А');c(3,[9,10],[1,2],'Б');c(3,[11,12],[1],'ИР');
+c(3,[1,2],[2],'Пс');inf(3,11,12,2);
+c(3,[1,2],[3],'Фк');c(3,[3,4],[3],'Пс');c(3,[5,6],[3,4],'Б');c(3,[7,8],[3],'ИР');c(3,[9,10],[3],'А');c(3,[11,12],[3,4],'Х');
+inf(3,1,2,4);c(3,[3,4],[4],'Я');c(3,[7,8],[4],'Фк');
+c(3,[19,20],[1],'Ял');c(3,[21,22],[1],'Пс');c(3,[13,14],[2],'Ял');c(3,[19,20],[2],'А');c(3,[21,22],[2],'Фк');
+lec(3,2,1,'ИР',R(1,16),'Зал №3 ЛК');lec(3,2,2,'Х',EV,'Зал №3 ЛК');lec(3,2,2,'Пс',OD,'Зал №3 ЛК');
+// Пт
+c(4,[7,8],[1],'Я');alt(4,[9,10],[1,2],'ОУ','БЖ');c(4,[1,2],[2],'Я');c(4,[5,6],[2],'Пс');c(4,[7,8],[2],'Ял');
+lec(4,1,1,'ИР',R(1,16),'Зал №2 ЛК');lec(4,1,2,'Х',EV,'Зал №2 ЛК');lec(4,1,2,'Пс',OD,'Зал №2 ЛК');lec(4,1,2,'Фк',[1],'Зал №2 ЛК');
+c(4,[13,14],[1],'ИР');c(4,[15,16],[1,2],'Х');c(4,[17,18],[1],'Пс');c(4,[19,20],[1,2],'Б');c(4,[21,22],[1,2],'А');
+c(4,[13,14],[2],'Фк');c(4,[17,18],[2],'Фк');
+c(4,[13,14],[3,4],'Б');alt(4,[15,16],[3,4],'БЖ','ОУ');c(4,[17,18],[3,4],'Х');inf(4,19,20,3);c(4,[21,22],[3,4],'Х');
+// Сб
+c(5,[1,2],[1],'Ял');inf(5,3,4,1);c(5,[5,6],[1],'Я');c(5,[7,8],[1],'А');c(5,[9,10],[1],'Фк');c(5,[11,12],[1,2],'Б');
+c(5,[5,6],[2],'А');c(5,[9,10],[2],'Ял');
+c(5,[13,14],[1],'А');c(5,[15,16],[1],'Фк');c(5,[17,18],[1],'А');c(5,[19,20],[1,2],'А');
+inf(5,13,14,2);c(5,[15,16],[2],'А');c(5,[17,18],[2],'Я');c(5,[21,22],[2],'А');c(5,[21,22],[3],'ИР');
+
+const W0=new Date(2026,7,31),DAY=864e5;
+const day0=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate());
+const ymd=d=>d.getFullYear()*1e4+(d.getMonth()+1)*100+d.getDate();
+const weekNo=d=>Math.floor(Math.round((day0(d)-W0)/DAY)/7)+1;
+const HOL={20261104:'День народного единства'};
+function period(d){const k=ymd(d);
+ if(HOL[k])return['off',HOL[k]];
+ if((k>=20260901&&k<=20261230)||(k>=20270109&&k<=20270116))return['study'];
+ if(k>=20261231&&k<=20270108)return['off','Новогодние праздники'];
+ if(k>=20270118&&k<=20270123)return['off','Зачётные дни'];
+ if(k>=20270125&&k<=20270131)return['off','Каникулы'];
+ return['off','Вне семестра']}
+const st=g=>g<=12?1:2;
+function lessons(g,d){
+ const wd=d.getDay();if(!wd||period(d)[0]!=='study')return[];
+ const n=weekNo(d),par=n%2?1:2,out=[];
+ for(const e of D[wd-1]){
+  if(e.lec){if(e.st===st(g)&&e.wk.includes(n))out.push({s:e.s,t:L[e.slot],type:'lec',room:e.room});continue}
+  if(!e.g.includes(g)||(e.w&&e.w!==par))continue;
+  for(const p of e.p)out.push({s:e.s,t:P[p],type:e.s==='ОУ'?'ou':'pr',w:e.w})}
+ return out.sort((x,y)=>x.t[0].localeCompare(y.t[0]))}
+const mins=t=>{const[h,m]=t.split(':');return h*60+ +m};
+const pl=(n,a,b,c)=>{const m=n%10,h=n%100;return n+' '+(m===1&&h!==11?a:m>=2&&m<=4&&(h<12||h>14)?b:c)};
+const mm=n=>pl(n,'минута','минуты','минут');
+const dur=n=>n>=60?pl(Math.floor(n/60),'час','часа','часов')+(n%60?' '+n%60+' мин':''):mm(n);
+const DN=['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'],DS=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+const MN=['Января','Февраля','Марта','Апреля','Мая','Июня','Июля','Августа','Сентября','Октября','Ноября','Декабря'];
+const dd=d=>String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0');
+const MINW=new Date(2026,7,31),MAXW=new Date(2027,0,25);
+let store={};try{store=JSON.parse(localStorage.getItem('stom-sched')||'{}')}catch(e){}
+store.hw=store.hw||{};store.tc=store.tc||{};store.rm=store.rm||{};
+const hg=location.hash.match(/^#g(\d{1,2})$/);if(hg&&+hg[1]>=1&&+hg[1]<=22){store.g=+hg[1];try{localStorage.setItem('stom-sched',JSON.stringify(store))}catch(e){}}
+try{const tg=window.Telegram&&Telegram.WebApp;if(tg){tg.ready();tg.expand();tg.setHeaderColor&&tg.setHeaderColor('#151c27');tg.setBackgroundColor&&tg.setBackgroundColor('#151c27')}}catch(e){}
+let group=store.g||1,sel=day0(new Date()),editing=null;
+const save=()=>{try{localStorage.setItem('stom-sched',JSON.stringify(store))}catch(e){}};
+const monday=d=>{const x=day0(d);x.setDate(x.getDate()-((x.getDay()+6)%7));return x};
+const $=id=>document.getElementById(id);
+const esc=s=>s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+const TL={lec:['Лекция','lec'],pr:['Практика','pr'],ou:['Учебная практика','ou']};
+const pin='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21.5s-7-6.3-7-11.7a7 7 0 0 1 14 0c0 5.4-7 11.7-7 11.7z"/><circle cx="12" cy="9.8" r="2.4"/></svg>';
+const plus='<svg width="17" height="17" viewBox="0 0 20 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 2v16M2 10h16"/></svg>';
+const lkey=l=>group+'|'+l.s+'|'+(l.type==='lec'?'lec':'pr');
+const tkey=l=>group+'|'+l.s+'|'+(l.type==='lec'?'lec':'pr');
+const teachLine=l=>{const n=store.tc[tkey(l)];return `<button class="who" data-a="teach" data-s="${l.s}" data-ty="${l.type}">${n?esc(n):(S[l.s][1]||'Преподаватель не указан')}${n?'':'<u>Указать преподавателя</u>'}</button>`};
+const key=(l)=>group+'|'+ymd(sel)+'|'+l.t[0];
+function render(){
+ $('grpName').textContent='Группа '+group;
+ const m=monday(sel),n=weekNo(m),sun=new Date(m);sun.setDate(m.getDate()+6);
+ $('wkRange').textContent=dd(m)+' - '+dd(sun);
+ $('wkNum').textContent=n>=1?n+', '+(n%2?'нечет':'чет'):'';
+ $('prev').disabled=m<=MINW;$('next').disabled=m>=MAXW;
+ const today=day0(new Date());
+ $('days').innerHTML=R(0,6).map(i=>{const x=new Date(m);x.setDate(m.getDate()+i);
+  return `<button class="day${+x===+sel?' sel':''}${+x===+today?' today':''}" data-i="${i}" aria-label="${DN[x.getDay()]} ${x.getDate()}"><small>${DS[i]}</small><b>${x.getDate()}</b></button>`}).join('');
+ const ls=lessons(group,sel),pr=period(sel);
+ $('dh').textContent=DN[sel.getDay()]+', '+sel.getDate()+' '+MN[sel.getMonth()];
+ $('dc').textContent=ls.length?pl(ls.length,'пара','пары','пар'):'Нет пар';
+ const now=new Date(),isT=+sel===+today,cur=now.getHours()*60+now.getMinutes();
+ let stat='',curBrk=-1;
+ if(isT&&ls.length){
+  const on=ls.find(l=>mins(l.t[0])<=cur&&cur<mins(l.t[3])),ni=ls.findIndex(l=>mins(l.t[0])>cur);
+  if(on){const nm=S[on.s][0];
+   if(cur<mins(on.t[1]))stat=`<b>Идёт: ${nm}</b><span>ещё ${dur(mins(on.t[3])-cur)} · перерыв через ${mm(mins(on.t[1])-cur)}</span>`;
+   else if(cur<mins(on.t[2]))stat=`<b>Перерыв · ещё ${mm(mins(on.t[2])-cur)}</b><span>затем продолжение: ${nm}</span>`;
+   else stat=`<b>Идёт: ${nm}</b><span>ещё ${dur(mins(on.t[3])-cur)}</span>`}
+  else if(ni>=0){const nx=ls[ni];curBrk=ni;stat=`<b>${ni?'Перемена':'До начала пар'} · ещё ${dur(mins(nx.t[0])-cur)}</b><span>затем ${S[nx.s][0]} в ${nx.t[0]}</span>`}
+  else stat='<b>Пары закончились</b><span>На сегодня всё</span>'}
+ $('status').innerHTML=stat?`<div class="status">${stat}</div>`:'';
+ if(!ls.length){$('list').innerHTML=`<div class="empty"><b>${sel.getDay()===0?'Выходной':pr[0]==='off'?pr[1]:'Пар нет'}</b>Занятий в этот день нет</div>`;return}
+ $('list').innerHTML=ls.map((l,i)=>{
+  const s=S[l.s],t=TL[l.type],lk=lkey(l),own=store.rm[lk],loc=own?(l.type==='lec'?own:'ауд. '+own):(l.room?l.room.replace('Зал №','Зал №').replace(' ЛК',' · ЛК'):LOC[l.s].short),k=key(l),hw=store.hw[k];
+  let brk='';if(i){const gap=mins(l.t[0])-mins(ls[i-1].t[3]);
+   if(gap>0){const c=i===curBrk;brk=`<div class="brk${c?' cur':''}">Перемена ${mm(gap)}${c?' · ещё '+mm(mins(l.t[0])-cur):''}</div>`}else brk='<div style="height:12px"></div>'}
+  const state=isT&&mins(l.t[0])<=cur&&cur<mins(l.t[3])?' now':'';
+  const sub=l.w?`<em>${l.w===2?'чет':'нечет'}</em>`:'';
+  const foot=editing===k?`<div class="ed"><textarea id="hwT" placeholder="Что задали">${esc(hw||'')}</textarea><div><button data-a="cancel">Отмена</button>${hw?'<button data-a="del">Удалить</button>':''}<button class="ok" data-a="save" data-k="${k}">Сохранить</button></div></div>`
+   :`<button class="add" data-a="edit" data-k="${k}">${plus}${hw?'Изменить домашнее задание':'Добавить домашнее задание'}</button>`;
+  return `${brk}<div class="row${state}"><div class="t"><b>${l.t[0]}</b><span>${l.t[3]}</span></div><div class="c"><div class="cb"><h3>${s[0]}${sub}</h3><span class="tag ${t[1]}">${t[0]}</span>${teachLine(l)}<button class="loc" data-a="loc" data-s="${l.s}" data-ty="${l.type}" data-room="${l.room||''}">${pin}${esc(loc)}<i>›</i></button>${hw&&editing!==k?`<p class="hw">${esc(hw)}</p>`:''}</div>${foot}</div></div>`}).join('');
+ if(editing){const ta=$('hwT');if(ta)ta.focus()}
+}
+$('list').onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
+ if(a==='teach'){openT(b.dataset.s,b.dataset.ty);return}
+ if(a==='loc'){openL(b.dataset.s,b.dataset.ty,b.dataset.room);return}
+ if(a==='edit')editing=b.dataset.k;
+ else if(a==='cancel')editing=null;
+ else if(a==='save'){const v=$('hwT').value.trim();if(v)store.hw[b.dataset.k]=v;else delete store.hw[b.dataset.k];save();editing=null}
+ else if(a==='del'){delete store.hw[editing];save();editing=null}
+ render()};
+let lk=null,pv=null,sel2=null,view={k:1,x:0,y:0},ownNum='';
+const roomOwner=(b,f,n)=>{for(const[k,arr]of Object.entries(LF))for(const v of arr)if(v.b===b&&v.f===f&&v.rooms&&v.rooms.includes(n))return S[k][1];return''};
+function variants(s,ty,room){
+ if(ty==='lec')return[{b:'ЛК',f:0,blocks:[room.replace(' ЛК','')],lec:1}];
+ const vs=LF[s].map(v=>({...v}));const own=store.rm[lk]||'';const n=parseInt(own,10);
+ if(n>=100&&n<1000){const f=Math.floor(n/100),b=vs[0].b;let v=vs.find(x=>x.b===b&&x.f===f);if(!v){v={b,f,rooms:[]};vs.push(v)}v.own=n}
+ return vs}
+function openL(s,ty,room){lk=group+'|'+s+'|'+(ty==='lec'?'lec':'pr');pv={s,ty,room,vs:variants(s,ty,room)};
+ let i=pv.vs.findIndex(v=>v.own);pv.i=i<0?0:i;sel2=null;
+ $('lCustom').value=store.rm[lk]||'';
+ $('lsheet').classList.add('open');drawPlan(true)}
+const fmtR=a=>{const r=[...a].sort((x,y)=>x-y),o=[];for(let i=0;i<r.length;){let j=i;while(j+1<r.length&&r[j+1]===r[j]+1)j++;o.push(j-i>=2?r[i]+'–'+r[j]:j>i?r[i]+', '+r[j]:''+r[i]);i=j+1}return o.join(', ')};
+function floorRooms(v){if(!v.rooms)return null;const set=new Set();
+ for(const arr of Object.values(LF))for(const x of arr)if(x.b===v.b&&x.f===v.f&&x.rooms)x.rooms.forEach(r=>set.add(r));
+ v.rooms.forEach(r=>set.add(r));if(v.own)set.add(v.own);return[...set].sort((a,b)=>b-a)}
+function drawPlan(fit){const v=pv.vs[pv.i],bb=B[v.b],mine=new Set(v.rooms||[]);
+ $('lTitle').textContent=BS[v.b]+(v.f?' · этаж '+v.f:'')+(v.lec?' · '+v.blocks[0]:'');
+ $('lSub').textContent=bb[0]+', НГМУ · '+bb[1];
+ const lbl=sel2?('ауд. '+sel2+(v.f?' · этаж '+v.f:'')):v.own?('ауд. '+v.own+(v.f?' · этаж '+v.f:'')):v.lec?(v.blocks[0]+' · '+BS[v.b]):v.rooms&&v.rooms.length?('ауд. '+fmtR(v.rooms)+(v.f?' · этаж '+v.f:'')):(S[pv.s][1]+(v.f?' · этаж '+v.f:''));
+ $('lPill').innerHTML=pin+'<span>'+esc(lbl)+'</span>';
+ $('lFloors').innerHTML=pv.vs.length>1?pv.vs.map((x,j)=>`<button data-j="${j}" class="${j===pv.i?'on':''}">${BS[x.b]}${x.f?' · '+x.f+' эт.':''}</button>`).join(''):'';
+ const W=88,H=86,C=50;let g='';const rooms=floorRooms(v);let width,height,hi=[];
+ const box=(x,y,w,h,label,st,id)=>{const on=st==='own'||st==='sel',dep=st==='dep';
+  g+=`<g ${id?`data-r="${id}"`:''} style="cursor:${id?'pointer':'default'}"><rect x="${x+3}" y="${y+4}" width="${w-6}" height="${h-6}" rx="6" fill="#1a2230" opacity=".7"/><rect x="${x+2}" y="${y+2}" width="${w-4}" height="${h-4}" rx="6" fill="${on?'#22344d':dep?'#1f2d42':'#1f2838'}" stroke="${on?'#5aa3ec':dep?'#36597f':'#2f3b4e'}" stroke-width="${on?4:1.6}"/>`+
+  (st==='own'?`<circle cx="${x+w/2}" cy="${y+h/2}" r="${Math.min(w,h)*.36}" fill="none" stroke="#5a8fc8" stroke-width="2"/>`:'')+
+  `<text x="${x+w/2}" y="${y+h/2+8}" text-anchor="middle" font-size="${String(label).length>8?15:23}" font-weight="700" fill="${on?'#7ab6f2':'#e9eef5'}" font-family="-apple-system,Inter,sans-serif">${esc(String(label))}</text></g>`;if(on||dep)hi.push([x,y,w,h,on])};
+ if(rooms){const top=rooms.filter(r=>r%2===0),bot=rooms.filter(r=>r%2===1);const n=Math.max(top.length,bot.length+2,6);width=n*W;
+  const ty=0,cy=H+4,by=cy+C+4;height=by+H;
+  g+=`<rect x="-6" y="${cy-2}" width="${width+12}" height="${C+4}" rx="6" fill="#253349"/>`;
+  const tcells=top.length?top:Array(n).fill('');const tw=width/tcells.length;tcells.forEach((r,j)=>{const up=(r!==''&&(r===v.own||r===sel2))?30:0;r===''?box(j*tw,ty,tw,H,'','',0):box(j*tw,ty-up,tw,H+up,r,r===sel2?'sel':r===v.own?'own':mine.has(r)?'dep':'',r)});
+  const cells=['Лестница',...bot,'Лестница'];const bw=width/cells.length;cells.forEach((r,j)=>typeof r==='number'?box(j*bw,by,bw,H,r,r===sel2?'sel':r===v.own?'own':mine.has(r)?'dep':'',r):box(j*bw,by,bw,H,r,'',0));
+  g+=`<circle cx="${bw/2}" cy="${by+H+2}" r="9" fill="#3aa36b"/><circle cx="${width-bw/2}" cy="${by+H+2}" r="9" fill="#3aa36b"/>`;
+ }else{const name=v.blocks[0];width=W*4;height=H*2+C+8;
+  g+=`<rect x="-6" y="${H+2}" width="${width+12}" height="${C+4}" rx="6" fill="#253349"/>`;
+  box(0,0,W*2.6,H,name,'own',0);box(W*2.6,0,W*1.4,H,'','',0);box(0,H+C+8,W,H,'Лестница','',0);box(W,H+C+8,W*3,H,'','',0)}
+ $('pg').innerHTML=g;pv.w=width;pv.h=height;pv.hi=hi;
+ $('lMap').href='https://yandex.ru/maps/65/novosibirsk/?text='+encodeURIComponent('Новосибирск, '+bb[1]);
+ const own=store.rm[lk];
+ $('lNote').innerHTML=(v.lec?'Зал — из официального расписания; этаж зала в открытых источниках не указан.':rooms?'Номера — учебные аудитории дисциплины из официальной справки МТО НГМУ. Расположение на схеме условное: настоящих планов этажей в открытом доступе нет. Нажмите на аудиторию, чтобы отметить её своей.':'Номера кабинетов кафедра на сайте не публикует — схема показывает только корпус'+(v.f?' и этаж':'')+'.')+(own?' <a href="#" class="cl" id="lClear">Убрать свою аудиторию</a>':'');
+ if(fit)fitView();else applyView()}
+function fitView(){const svg=$('plan'),Wv=svg.clientWidth,Hv=svg.clientHeight-170;const k=Math.min(Wv/(pv.w+30),Hv/(pv.h+30),.95);
+ view.k=Math.max(k,.62);let cx=pv.w/2;
+ if(view.k*pv.w>Wv&&pv.hi.length){const pr=pv.hi.filter(a=>a[4]);const src=pr.length?pr:pv.hi;const xs=src.map(a=>a[0]+a[2]/2);cx=Math.min(Math.max((Math.min(...xs)+Math.max(...xs))/2,Wv/2/view.k),pv.w-Wv/2/view.k)}
+ view.x=Wv/2-cx*view.k;view.y=90+Hv/2-pv.h/2*view.k;applyView()}
+function applyView(){$('pg').setAttribute('transform',`translate(${view.x},${view.y}) scale(${view.k})`)}
+const zoomBy=f=>{const svg=$('plan'),cx=svg.clientWidth/2,cy=svg.clientHeight/2;const k=Math.min(Math.max(view.k*f,.25),4);view.x=cx-(cx-view.x)*k/view.k;view.y=cy-(cy-view.y)*k/view.k;view.k=k;applyView()};
+$('zIn').onclick=()=>zoomBy(1.3);$('zOut').onclick=()=>zoomBy(1/1.3);$('zFit').onclick=()=>fitView();
+{const svg=$('plan');let drag=null,moved=0;const pts=new Map();let pinch=null;
+ svg.addEventListener('pointerdown',e=>{svg.setPointerCapture(e.pointerId);pts.set(e.pointerId,[e.clientX,e.clientY]);moved=0;
+  if(pts.size===2){const[a,b]=[...pts.values()];pinch={d:Math.hypot(a[0]-b[0],a[1]-b[1]),k:view.k}}else drag={x:e.clientX,y:e.clientY,vx:view.x,vy:view.y}});
+ svg.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,[e.clientX,e.clientY]);
+  if(pinch&&pts.size===2){const[a,b]=[...pts.values()];const d=Math.hypot(a[0]-b[0],a[1]-b[1]);zoomBy(pinch.k*d/pinch.d/view.k);moved=9;return}
+  if(drag){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;moved=Math.max(moved,Math.abs(dx)+Math.abs(dy));view.x=drag.vx+dx;view.y=drag.vy+dy;applyView()}});
+ const up=e=>{pts.delete(e.pointerId);if(pts.size<2)pinch=null;if(!pts.size){if(moved<6){const t=document.elementFromPoint(e.clientX,e.clientY);const r=t&&t.closest&&t.closest('[data-r]');if(r){sel2=+r.dataset.r;$('lCustom').value=sel2;drawPlan(false)}}drag=null}};
+ svg.addEventListener('pointerup',up);svg.addEventListener('pointercancel',up);
+ svg.addEventListener('wheel',e=>{e.preventDefault();zoomBy(e.deltaY<0?1.15:1/1.15)},{passive:false});}
+$('lFloors').onclick=e=>{const b=e.target.closest('[data-j]');if(b){pv.i=+b.dataset.j;sel2=null;drawPlan(true)}};
+const setL=v=>{if(v)store.rm[lk]=v;else delete store.rm[lk];save();pv.vs=variants(pv.s,pv.ty,pv.room);const i=pv.vs.findIndex(x=>x.own);if(i>=0)pv.i=i;sel2=null;drawPlan(true);render()};
+$('lSave').onclick=()=>setL($('lCustom').value.trim());
+$('lNote').onclick=e=>{if(e.target.id==='lClear'){e.preventDefault();$('lCustom').value='';setL('')}};
+$('lclose').onclick=()=>$('lsheet').classList.remove('open');
+window.addEventListener('resize',()=>{if($('lsheet').classList.contains('open'))fitView()});
+let tk=null;
+function openT(s,ty){tk=group+'|'+s+'|'+(ty==='lec'?'lec':'pr');const cur=store.tc[tk]||'';
+ $('tTitle').textContent=S[s][0];$('tSub').textContent=(ty==='lec'?'Лекции':'Практические занятия')+' · группа '+group+' · '+(S[s][1]||'');
+ $('tpick').innerHTML=(T[s]||[]).map(([n,p])=>`<button class="pp${n===cur?' on':''}" data-n="${esc(n)}"><b>${n}</b><span>${p}</span></button>`).join('');
+ const inList=(T[s]||[]).some(([n])=>n===cur);$('tCustom').value=inList?'':cur;
+ $('tReset').innerHTML=cur?'<a href="#" id="tClear">Убрать преподавателя</a>':'Выбор сохранится для всех пар этого предмета в группе '+group+'.';
+ $('tsheet').classList.add('open')}
+const setT=v=>{if(v)store.tc[tk]=v;else delete store.tc[tk];save();$('tsheet').classList.remove('open');render()};
+$('tpick').onclick=e=>{const b=e.target.closest('[data-n]');if(b)setT(b.dataset.n)};
+$('tSave').onclick=()=>setT($('tCustom').value.trim()||store.tc[tk]||'');
+$('tReset').onclick=e=>{if(e.target.id==='tClear'){e.preventDefault();setT('')}};
+$('tclose').onclick=()=>$('tsheet').classList.remove('open');
+$('tsheet').onclick=e=>{if(e.target.id==='tsheet')$('tsheet').classList.remove('open')};
+const DEPS=[['А','Кафедра анатомии человека им. акад. Ю.И. Бородина','Анатомия'],['Б','Кафедра медицинской генетики и биологии','Биология'],['Х','Кафедра медицинской химии','Химия'],['ИР','Кафедра социально-исторических наук','История России'],['Я','Кафедра лингвистики и межкультурной коммуникации','Иностранный и латинский язык'],['БЖ','Кафедра нормальной физиологии и основ БЖ','Безопасность жизнедеятельности'],['Инф','Кафедра математики','Медицинская информатика'],['Фк','Кафедра физического воспитания','Физическая культура и спорт'],['Пс','Кафедра педагогики, психологии и социальной работы','Психология межличностной коммуникации'],['ОУ','Кафедра сестринского дела','Учебная практика «Основы ухода за больными»']];
+function renderT(){const q=$('q').value.trim().toLowerCase();
+ $('tlist').innerHTML=DEPS.map(([k,d,subj])=>{const ppl=T[k].filter(([n,p])=>!q||n.toLowerCase().includes(q)||subj.toLowerCase().includes(q)||d.toLowerCase().includes(q));
+  if(!ppl.length)return'';return `<div class="dep"><h4>${subj}</h4><p>${d} · ${pl(T[k].length,'преподаватель','преподавателя','преподавателей')}<br>${B[LOC[k].b][0]}, ${B[LOC[k].b][1]}${LOC[k].rooms?' · ауд. '+LOC[k].rooms:''}</p><div class="ppl">${ppl.map(([n,p])=>`<div class="pp"><b>${n}</b><span>${p}</span></div>`).join('')}</div></div>`}).join('')||'<div class="empty"><b>Никого не нашлось</b>Попробуйте другую фамилию</div>'}
+$('q').oninput=renderT;
+const showTab=t=>{$('tabG').classList.toggle('on',t==='g');$('tabT').classList.toggle('on',t==='t');$('viewG').classList.toggle('hide',t!=='g');$('viewT').classList.toggle('hide',t!=='t');if(t==='t')renderT()};
+$('tabG').onclick=()=>showTab('g');$('tabT').onclick=()=>showTab('t');
+const gbtn=(a,b)=>R(a,b).map(g=>`<button data-g="${g}" class="${g===group?'on':''}">${g}</button>`).join('');
+const openSheet=()=>{$('g1').innerHTML=gbtn(1,12);$('g2').innerHTML=gbtn(13,22);$('sheet').classList.add('open')};
+const closeSheet=()=>$('sheet').classList.remove('open');
+$('grpBtn').onclick=openSheet;$('close').onclick=closeSheet;
+$('sheet').onclick=e=>{const b=e.target.closest('[data-g]');if(b){group=+b.dataset.g;store.g=group;save();closeSheet();editing=null;render()}else if(e.target.id==='sheet')closeSheet()};
+$('days').onclick=e=>{const b=e.target.closest('[data-i]');if(b){const m=monday(sel);sel=new Date(m);sel.setDate(m.getDate()+ +b.dataset.i);editing=null;render()}};
+const shift=k=>{sel=new Date(sel);sel.setDate(sel.getDate()+7*k);editing=null;render()};
+$('prev').onclick=()=>shift(-1);$('next').onclick=()=>shift(1);
+$('today').onclick=()=>{showTab('g');sel=day0(new Date());editing=null;render();window.scrollTo({top:0,behavior:'smooth'})};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSheet();$('tsheet').classList.remove('open');$('lsheet').classList.remove('open')}});
+if(!store.g)openSheet();
+render();setInterval(()=>{if(!editing)render()},30000);
+}
+</script>
+</body>
+</html>
