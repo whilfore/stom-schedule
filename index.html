@@ -31,9 +31,59 @@ button:focus-visible,textarea:focus-visible{outline:2px solid var(--acc);outline
 .cust{display:flex;gap:8px;margin-top:14px}.cust input{flex:1;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:16px inherit;font-family:inherit;padding:0 12px}.cust button{height:44px;padding:0 14px;border-radius:12px;border:0;background:var(--acc);color:#fff;font-weight:600}
 .src{margin-top:18px;font-size:12.5px;color:var(--mute);line-height:1.45}.src a{color:#5aa3ec}
 .hide{display:none}
+.btns{gap:8px}
+.tb{height:47px;width:47px;flex:none;border:0;border-radius:24px;background:#1d2533;color:#8ea9d0;display:flex;align-items:center;justify-content:center;gap:10px;padding:0;transition:flex .25s,background .25s}
+.tb span{display:none;font-size:16.5px;font-weight:700}
+.tb.on{flex:1;background:#4f97dd;color:#fff;justify-content:flex-start;padding:0 18px}.tb.on span{display:inline}
+.tb[data-tab=i]{color:#5aa3ec}
+.btabs{display:flex;gap:18px;justify-content:safe center;overflow-x:auto;scrollbar-width:none;padding:6px 2px 2px;white-space:nowrap}
+.btabs::-webkit-scrollbar{display:none}
+.btabs button{border:0;background:none;padding:0;font-size:19px;font-weight:800;color:#4b5a70;flex:none}
+.btabs button.on{color:var(--ink);font-size:22px}
+.bsub{margin:10px 0 0;text-align:center;font-size:13.5px;color:var(--mute)}
+.sbox{display:flex;align-items:center;gap:10px;height:46px;margin-top:16px;padding:0 14px;border-radius:14px;background:var(--card);border:1px solid var(--line);color:var(--mute)}
+.sbox input{flex:1;border:0;background:none;color:var(--ink);font:16px inherit;font-family:inherit;outline:0}
+.frow{display:flex;align-items:center;gap:10px;margin-top:14px}.frow>span{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--mute)}
+#fl{display:flex;gap:8px;flex-wrap:wrap}
+#fl button{min-width:42px;height:42px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-weight:700;font-size:15px;color:var(--mute)}
+#fl button.on{background:#4f97dd;border-color:#4f97dd;color:#fff}
+.rgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
+.rgrid button{height:46px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-weight:700;font-size:15px}
+.rgrid button.mine{border-color:#3b6ea3;color:#7ab6f2}
+.rgrid .none{grid-column:1/-1;text-align:center;color:var(--mute);padding:24px 0}
+.ah{margin:6px 0 16px;font-size:25px;font-weight:800}
+.an{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 17px 13px;margin-bottom:12px}
+.an p{margin:0;font-size:15px;line-height:1.45;white-space:pre-line}
+.an div{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px}
+.an small{font-size:12px;color:#5f6d82}
+.an span{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#6eacea;background:#22324a;padding:5px 10px;border-radius:10px;white-space:nowrap}
+.panel.tall{min-height:70vh}
+.panel .sh{margin:4px 0 0;font-size:19px;font-weight:800}
+.ssub{margin:6px 0 0!important;font-size:13px!important;color:var(--mute)}
+.slbl{margin:16px 0 8px!important;font-size:12.5px!important;font-weight:700;color:#7e8ca0}
+.sin{width:100%;height:48px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:16px inherit;font-family:inherit;padding:0 14px}
+.plist{margin-top:8px}
+.plist button{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:50px;border:0;border-bottom:1px solid #263244;background:none;text-align:left;padding:8px 4px;font-size:15.5px;font-weight:700}
+.plist button span{font-size:12.5px;font-weight:500;color:var(--mute);text-align:right;margin-left:12px}
+.plist button.on{color:#7ab6f2}
+.toast{position:fixed;top:14px;left:50%;transform:translate(-50%,-30px);opacity:0;z-index:20;background:#25344a;border:1px solid #33435c;color:var(--ink);font-size:14px;font-weight:700;padding:11px 18px;border-radius:14px;transition:.25s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.gtag{display:inline-flex;height:21px;align-items:center;margin-top:8px;padding:0 9px;border-radius:7px;font-size:12.5px;font-weight:600;background:#1d3b2d;color:#5fd194}
+.iico{width:56px;height:56px;border-radius:50%;background:#22344d;display:grid;place-items:center;color:#5aa3ec}
+.panel .ih{margin:16px 0 0;font-size:19px;font-weight:800}
+.isub{margin:6px 0 16px!important;font-size:13.5px!important;color:var(--mute)}
+.ibtn{width:100%;height:50px;border:0;border-radius:14px;background:#4f97dd;color:#fff;font-weight:700;font-size:15.5px}
+.acc{margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.arow{display:flex;align-items:center;gap:12px;width:100%;height:58px;border:0;background:none;padding:0 16px;text-align:left}
+.arow b{flex:1;font-size:16px}.arow i{font-style:normal;color:var(--mute);font-size:22px;transition:transform .2s}
+.acc.open .arow i{transform:rotate(90deg)}
+.steps{display:none;margin:0;padding:0 18px 14px 40px;font-size:14px;line-height:1.5;color:var(--soft)}
+.acc.open .steps{display:block}
+.inot{display:block;margin:18px auto 0;border:0;background:none;color:var(--mute);font-weight:700;font-size:15px;padding:8px 16px}
 button.loc{border:0;font-family:inherit;cursor:pointer}
 .plan{position:fixed;inset:0;z-index:10;background:var(--bg);display:none;flex-direction:column}
 .plan.open{display:flex}
+.plan.lroom #lCustom,.plan.lroom #lSave{display:none}
 .ph{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px 16px 14px;border-bottom:1px solid #263142;max-width:430px;width:100%;margin:0 auto}
 .ph h2{margin:0;font-size:22px;font-weight:800;letter-spacing:-.2px}
 .ph p{margin:6px 0 0;font-size:14px;color:var(--mute)}
@@ -113,7 +163,7 @@ button.loc{border:0;font-family:inherit;cursor:pointer}
 .btns{display:flex;gap:8px;align-items:center}
 .ic{width:47px;height:47px;border-radius:50%;background:#1d2533;display:grid;place-items:center;color:#8ea9d0;flex:none;border:0;padding:0}
 .main{flex:1;height:47px;border-radius:24px;border:0;background:#4f97dd;color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:16.5px;font-weight:700}
-.sheet{position:fixed;inset:0;background:rgba(4,8,14,.6);display:none;align-items:flex-end;justify-content:center;z-index:9}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:flex-end;justify-content:center;z-index:9}
 .sheet.open{display:flex}
 .panel{background:var(--bg);width:100%;max-width:430px;border-radius:26px 26px 0 0;padding:14px 16px 28px;max-height:88vh;overflow:auto}
 .panel h2{margin:6px 0 0;font-size:24px;font-weight:800}
@@ -128,11 +178,10 @@ button.loc{border:0;font-family:inherit;cursor:pointer}
 </head>
 <body>
 <div class="app">
+<div id="pageS">
   <div class="tabs"><button id="tabG" class="on">Группы</button><button id="tabT">Преподаватели</button></div>
-<div id="viewG">
-  <button class="grp" id="grpBtn" aria-haspopup="dialog">
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="7.5" r="3.3"/><path d="M2.8 19.5c.4-3.6 2.9-5.6 6.2-5.6s5.8 2 6.2 5.6"/><circle cx="17.2" cy="8.6" r="2.6"/><path d="M16.8 13.9c2.6.2 4.2 2.1 4.5 5"/></svg>
-    <div><small>Группа</small><b id="grpName">Группа 1</b></div><i>›</i>
+  <button class="grp" id="grpBtn" aria-haspopup="dialog"><span id="grpIco"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="7.5" r="3.3"/><path d="M2.8 19.5c.4-3.6 2.9-5.6 6.2-5.6s5.8 2 6.2 5.6"/><circle cx="17.2" cy="8.6" r="2.6"/><path d="M16.8 13.9c2.6.2 4.2 2.1 4.5 5"/></svg></span>
+    <div><small id="grpLbl">Группа</small><b id="grpName">Группа 1</b></div><i>›</i>
   </button>
   <div class="week">
     <button class="nav" id="prev" aria-label="Предыдущая неделя"><svg width="12" height="18" viewBox="0 0 12 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2 2.5 9 9 16"/></svg></button>
@@ -144,19 +193,43 @@ button.loc{border:0;font-family:inherit;cursor:pointer}
   <div id="status"></div>
   <div class="list" id="list"></div>
 </div>
-<div id="viewT" class="hide"><input class="search" id="q" placeholder="Поиск по фамилии или предмету" autocomplete="off"><div id="tlist"></div><p class="src">Составы кафедр — со страниц кафедр на ngmu.ru; аудитории — из справки о материально-техническом обеспечении программы 31.05.03 Стоматология (new.ngmu.ru). Проверено 23.11.2026. Кто ведёт конкретную группу, университет публично не указывает: выберите своего преподавателя в карточке пары.</p></div>
+<div id="pageM" class="hide">
+  <div class="btabs" id="bTabs"></div>
+  <p class="bsub" id="bSub"></p>
+  <label class="sbox"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="rq" placeholder="Поиск: например, 441" autocomplete="off" inputmode="search"></label>
+  <div class="frow"><span>ЭТАЖ</span><div id="fl"></div></div>
+  <div class="rgrid" id="rgrid"></div>
+  <p class="src">Аудитории — из справки о материально-техническом обеспечении программы 31.05.03 «Стоматология» (new.ngmu.ru). Схемы этажей условные: поэтажных планов корпусов НГМУ в открытом доступе нет.</p>
 </div>
-<div class="bar"><div><div class="handle"></div><div class="btns">
-  <span class="ic" aria-hidden="true"><svg width="16" height="20" viewBox="0 0 20 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="1.5" width="14" height="21" rx="3"/><path d="M8 18.5h4" stroke-linecap="round"/></svg></span>
-  <button class="main" id="today"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"/><path d="M3 10h18M8 2.5v4M16 2.5v4"/></svg>Расписание</button>
-  <span class="ic" aria-hidden="true"><svg width="20" height="18" viewBox="0 0 24 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M2 4.5 8.5 2l7 2.5L22 2v15.5L15.5 20l-7-2.5L2 20z"/><path d="M8.5 2v15.5M15.5 4.5V20"/></svg></span>
-  <span class="ic" aria-hidden="true"><svg width="20" height="18" viewBox="0 0 24 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 8.5v5h3l9 5.5V3L6 8.5z"/><path d="M18.5 7.5a5 5 0 0 1 0 7" stroke-linecap="round"/></svg></span>
+<div id="pageA" class="hide">
+  <h1 class="ah">Объявления</h1>
+  <div id="alist"></div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="bar"><div><div class="handle"></div><div class="btns" id="nav">
+  <button class="tb" data-tab="i" aria-label="Установить приложение"><svg width="16" height="20" viewBox="0 0 20 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="1.5" width="14" height="21" rx="3"/><path d="M8 18.5h4" stroke-linecap="round"/></svg><span>Установить</span></button>
+  <button class="tb on" data-tab="s" id="today"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"/><path d="M3 10h18M8 2.5v4M16 2.5v4"/></svg><span>Расписание</span></button>
+  <button class="tb" data-tab="m"><svg width="20" height="18" viewBox="0 0 24 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M2 4.5 8.5 2l7 2.5L22 2v15.5L15.5 20l-7-2.5L2 20z"/><path d="M8.5 2v15.5M15.5 4.5V20"/></svg><span>Карта</span></button>
+  <button class="tb" data-tab="a"><svg width="20" height="18" viewBox="0 0 24 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 8.5v5h3l9 5.5V3L6 8.5z"/><path d="M18.5 7.5a5 5 0 0 1 0 7" stroke-linecap="round"/></svg><span>Объявления</span></button>
 </div></div></div>
+<div class="sheet" id="isheet" role="dialog" aria-modal="true" aria-label="Установить приложение"><div class="panel">
+  <div class="handle" style="margin:0 auto 18px"></div>
+  <div class="iico"><svg width="16" height="20" viewBox="0 0 20 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="1.5" width="14" height="21" rx="3"/><path d="M8 18.5h4" stroke-linecap="round"/></svg></div>
+  <h2 class="ih">Установить приложение</h2><p class="isub">Добавить расписание на главный экран телефона</p>
+  <button class="ibtn" id="iGo">Установить</button>
+  <div class="acc" data-acc="and"><button class="arow"><svg width="26" height="22" viewBox="0 0 26 22" fill="#5aa3ec"><path d="M4 12a9 9 0 0 1 18 0v2H4z"/><circle cx="9" cy="8.5" r="1.2" fill="#1d2738"/><circle cx="17" cy="8.5" r="1.2" fill="#1d2738"/><path d="M7 3.5 5.5 1M19 3.5 20.5 1" stroke="#5aa3ec" stroke-width="1.6" stroke-linecap="round"/></svg><b>Android</b><i>›</i></button>
+    <ol class="steps"><li>Откройте приложение по кнопке «Расписание» в боте.</li><li>Нажмите <b>⋮</b> вверху справа.</li><li>Выберите <b>«Добавить на главный экран»</b>.</li><li>Или откройте <b>whilfore.github.io/stom-schedule</b> в Chrome → ⋮ → «Добавить на главный экран».</li></ol></div>
+  <div class="acc" data-acc="ios"><button class="arow"><svg width="22" height="26" viewBox="0 0 22 26" fill="#5aa3ec"><path d="M18 13.7c0-3 2.4-4.4 2.5-4.5-1.4-2-3.5-2.3-4.3-2.3-1.8-.2-3.5 1.1-4.4 1.1-.9 0-2.3-1-3.8-1-2 0-3.8 1.2-4.8 2.9-2.1 3.6-.5 8.9 1.5 11.8 1 1.4 2.1 3 3.7 3 1.5-.1 2-1 3.8-1s2.3 1 3.8.9c1.6 0 2.6-1.4 3.5-2.9 1.1-1.6 1.6-3.2 1.6-3.3-.1 0-3-1.2-3.1-4.7zM15.2 4.9c.8-1 1.4-2.3 1.2-3.7-1.2.1-2.6.8-3.4 1.8-.7.8-1.4 2.2-1.2 3.5 1.3.1 2.6-.7 3.4-1.6z"/></svg><b>iPhone</b><i>›</i></button>
+    <ol class="steps"><li>Откройте <b>whilfore.github.io/stom-schedule</b> в Safari.</li><li>Нажмите кнопку <b>«Поделиться»</b> внизу экрана.</li><li>Выберите <b>«На экран „Домой“»</b> и нажмите «Добавить».</li></ol></div>
+  <button class="inot" id="iNo">Не сейчас</button>
+</div></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Выбор группы">
-  <div class="panel"><div class="handle" style="margin:0 auto 6px"></div><button class="x" id="close" aria-label="Закрыть">✕</button><h2>Группа</h2>
-    <p>Стоматология, 1 курс · I поток</p><div class="gg" id="g1"></div>
-    <p>II поток</p><div class="gg" id="g2"></div>
-    <div class="note">Перенесено со скана расписания (31.05.03 «Стоматология», 1 курс, 1 семестр 2026–2027). Занятия 01.09–30.12.2026 и 09.01–16.01.2027, зачётные дни 18.01–23.01, каникулы 25.01–31.01. Недели считаются от 31.08.2026, 1-я — нечётная. Аудитории — из справки МТО НГМУ по программе 31.05.03; конкретную аудиторию группы университет не публикует. Факультатив «Русский язык как иностранный» — по расписанию кафедры.</div>
+  <div class="panel tall"><div class="handle" style="margin:0 auto 10px"></div><button class="x" id="close" aria-label="Закрыть">✕</button>
+    <h2 class="sh" id="pkTitle">Выбор группы</h2><p class="ssub">Выбор запомнится на этом устройстве</p>
+    <p class="slbl" id="pkLbl">Поиск группы</p><input class="sin" id="pkQ" placeholder="Поиск: например, 5" autocomplete="off">
+    <div class="plist" id="pkList"></div>
+    <div class="note">Перенесено со скана расписания (31.05.03 «Стоматология», 1 курс, 1 семестр 2026–2027). Занятия 01.09–30.12.2026 и 09.01–16.01.2027, зачётные дни 18.01–23.01, каникулы 25.01–31.01. Недели считаются от 31.08.2026, 1-я — нечётная. Составы кафедр — с ngmu.ru; кто ведёт конкретную группу, университет публично не указывает.</div>
   </div>
 </div>
 <div class="sheet" id="tsheet" role="dialog" aria-modal="true" aria-label="Выбор преподавателя"><div class="panel"><div class="handle" style="margin:0 auto 6px"></div><button class="x" id="tclose" aria-label="Закрыть">✕</button><h2 id="tTitle">Преподаватель</h2><p id="tSub"></p><div class="ppl" id="tpick"></div><div class="cust"><input id="tCustom" placeholder="Другой преподаватель"><button id="tSave">Готово</button></div><p class="src" id="tReset"></p></div></div>
@@ -214,7 +287,7 @@ const LF={
  'Пс':[{b:'УК5',f:2,rooms:[202,209]}],
  'ОУ':[{b:'ГКБ12',f:0,rooms:[1,2,3]},{b:'ГИКБ1',f:0,rooms:[1]}]
 };
-const BS={ЛК:'ЛК',УК6:'УК №6',УК5:'УК №5',ГК:'Главный корпус',ГКБ12:'ГКБ №12',ГИКБ1:'ГИКБ №1'};
+const BS={ЛК:'ЛК',УК6:'УК №6',УК5:'УК №5',ГК:'Главный',ГКБ12:'ГКБ №12',ГИКБ1:'ГИКБ №1'};
 const P={1:['09:00','09:45','09:55','10:40'],2:['11:00','11:45','11:55','12:40'],3:['13:30','14:15','14:25','15:10'],4:['15:20','16:05','16:15','17:00']};
 const L={1:['14:00','14:45','14:55','15:40'],2:['16:00','16:45','16:55','17:40']};
 const D=[[],[],[],[],[],[]];
@@ -292,7 +365,7 @@ const MINW=new Date(2026,7,31),MAXW=new Date(2027,0,25);
 let store={};try{store=JSON.parse(localStorage.getItem('stom-sched')||'{}')}catch(e){}
 store.hw=store.hw||{};store.tc=store.tc||{};store.rm=store.rm||{};
 const hg=location.hash.match(/^#g(\d{1,2})$/);if(hg&&+hg[1]>=1&&+hg[1]<=22){store.g=+hg[1];try{localStorage.setItem('stom-sched',JSON.stringify(store))}catch(e){}}
-try{const tg=window.Telegram&&Telegram.WebApp;if(tg){tg.ready();tg.expand();tg.setHeaderColor&&tg.setHeaderColor('#151c27');tg.setBackgroundColor&&tg.setBackgroundColor('#151c27')}}catch(e){}
+try{const tg=window.Telegram&&Telegram.WebApp;if(tg){tg.ready();tg.expand();tg.setHeaderColor&&tg.setHeaderColor('#151c27');tg.setBackgroundColor&&tg.setBackgroundColor('#151c27');tg.setBottomBarColor&&tg.setBottomBarColor('#0f141d')}}catch(e){}
 let group=store.g||1,sel=day0(new Date()),editing=null;
 const save=()=>{try{localStorage.setItem('stom-sched',JSON.stringify(store))}catch(e){}};
 const monday=d=>{const x=day0(d);x.setDate(x.getDate()-((x.getDay()+6)%7));return x};
@@ -300,13 +373,23 @@ const $=id=>document.getElementById(id);
 const esc=s=>s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
 const TL={lec:['Лекция','lec'],pr:['Практика','pr'],ou:['Учебная практика','ou']};
 const pin='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21.5s-7-6.3-7-11.7a7 7 0 0 1 14 0c0 5.4-7 11.7-7 11.7z"/><circle cx="12" cy="9.8" r="2.4"/></svg>';
+const ICOG='<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="7.5" r="3.3"/><path d="M2.8 19.5c.4-3.6 2.9-5.6 6.2-5.6s5.8 2 6.2 5.6"/><circle cx="17.2" cy="8.6" r="2.6"/><path d="M16.8 13.9c2.6.2 4.2 2.1 4.5 5"/></svg>';
 const plus='<svg width="17" height="17" viewBox="0 0 20 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 2v16M2 10h16"/></svg>';
 const lkey=l=>group+'|'+l.s+'|'+(l.type==='lec'?'lec':'pr');
 const tkey=l=>group+'|'+l.s+'|'+(l.type==='lec'?'lec':'pr');
 const teachLine=l=>{const n=store.tc[tkey(l)];return `<button class="who" data-a="teach" data-s="${l.s}" data-ty="${l.type}">${n?esc(n):(S[l.s][1]||'Преподаватель не указан')}${n?'':'<u>Указать преподавателя</u>'}</button>`};
 const key=(l)=>group+'|'+ymd(sel)+'|'+l.t[0];
+let mode='g',teacher=store.teacher||'';
+const shortName=n=>{const p=n.split(' ');return p[0]+(p[1]?' '+p[1][0]+'.':'')+(p[2]?p[2][0]+'.':'')};
+function teacherLessons(d){const out=[];
+ for(let g=1;g<=22;g++)for(const l of lessons(g,d)){const k=g+'|'+l.s+'|'+(l.type==='lec'?'lec':'pr');if(store.tc[k]===teacher){const st=l.type==='lec'?(g<=12?'I':'II'):null;if(st&&out.some(x=>x.t[0]===l.t[0]&&x.s===l.s))continue;out.push({...l,g,st})}}
+ const m=new Map();for(const l of out){const k=l.t[0]+l.s+l.type;if(m.has(k)&&!l.st){m.get(k).gs.push(l.g)}else if(!m.has(k))m.set(k,{...l,gs:[l.g]})}
+ return [...m.values()].sort((a,b)=>a.t[0].localeCompare(b.t[0]))}
 function render(){
- $('grpName').textContent='Группа '+group;
+ const tm=mode==='t';
+ $('grpLbl').textContent=tm?'Преподаватель':'Группа';
+ $('grpName').textContent=tm?(teacher?shortName(teacher):'Выберите преподавателя'):'Группа '+group;
+ $('grpIco').innerHTML=tm?'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="7.5" r="3.6"/><path d="M4.5 20c.6-4 3.6-6.2 7.5-6.2s6.9 2.2 7.5 6.2"/></svg>':ICOG;
  const m=monday(sel),n=weekNo(m),sun=new Date(m);sun.setDate(m.getDate()+6);
  $('wkRange').textContent=dd(m)+' - '+dd(sun);
  $('wkNum').textContent=n>=1?n+', '+(n%2?'нечет':'чет'):'';
@@ -314,7 +397,7 @@ function render(){
  const today=day0(new Date());
  $('days').innerHTML=R(0,6).map(i=>{const x=new Date(m);x.setDate(m.getDate()+i);
   return `<button class="day${+x===+sel?' sel':''}${+x===+today?' today':''}" data-i="${i}" aria-label="${DN[x.getDay()]} ${x.getDate()}"><small>${DS[i]}</small><b>${x.getDate()}</b></button>`}).join('');
- const ls=lessons(group,sel),pr=period(sel);
+ const ls=tm?(teacher?teacherLessons(sel):[]):lessons(group,sel),pr=period(sel);
  $('dh').textContent=DN[sel.getDay()]+', '+sel.getDate()+' '+MN[sel.getMonth()];
  $('dc').textContent=ls.length?pl(ls.length,'пара','пары','пар'):'Нет пар';
  const now=new Date(),isT=+sel===+today,cur=now.getHours()*60+now.getMinutes();
@@ -322,12 +405,13 @@ function render(){
  if(isT&&ls.length){
   const on=ls.find(l=>mins(l.t[0])<=cur&&cur<mins(l.t[3])),ni=ls.findIndex(l=>mins(l.t[0])>cur);
   if(on){const nm=S[on.s][0];
-   if(cur<mins(on.t[1]))stat=`<b>Идёт: ${nm}</b><span>ещё ${dur(mins(on.t[3])-cur)} · перерыв через ${mm(mins(on.t[1])-cur)}</span>`;
-   else if(cur<mins(on.t[2]))stat=`<b>Перерыв · ещё ${mm(mins(on.t[2])-cur)}</b><span>затем продолжение: ${nm}</span>`;
-   else stat=`<b>Идёт: ${nm}</b><span>ещё ${dur(mins(on.t[3])-cur)}</span>`}
+   if(cur>=mins(on.t[1])&&cur<mins(on.t[2]))stat=`<b>Перерыв · ещё ${mm(mins(on.t[2])-cur)}</b><span>затем продолжение: ${nm}</span>`;
+   else stat=`<b>Идёт: ${nm}</b><span>ещё ${dur(mins(on.t[3])-cur)} · конец в ${on.t[3]}</span>`}
   else if(ni>=0){const nx=ls[ni];curBrk=ni;stat=`<b>${ni?'Перемена':'До начала пар'} · ещё ${dur(mins(nx.t[0])-cur)}</b><span>затем ${S[nx.s][0]} в ${nx.t[0]}</span>`}
-  else stat='<b>Пары закончились</b><span>На сегодня всё</span>'}
+  else stat='<b>Занятия на сегодня закончились</b>'}
  $('status').innerHTML=stat?`<div class="status">${stat}</div>`:'';
+ if(tm&&!teacher){$('status').innerHTML='';$('dc').textContent='';$('list').innerHTML='<div class="empty"><b>Выберите преподавателя</b>Нажмите на карточку выше</div>';return}
+ if(tm&&!Object.values(store.tc).includes(teacher)){$('status').innerHTML='';$('list').innerHTML=`<div class="empty"><b>Пары не назначены</b>НГМУ не публикует, кто ведёт какую группу. Отметьте этого преподавателя в карточке пары на вкладке «Группы» — и здесь появятся его занятия.</div>`;return}
  if(!ls.length){$('list').innerHTML=`<div class="empty"><b>${sel.getDay()===0?'Выходной':pr[0]==='off'?pr[1]:'Пар нет'}</b>Занятий в этот день нет</div>`;return}
  $('list').innerHTML=ls.map((l,i)=>{
   const s=S[l.s],t=TL[l.type],lk=lkey(l),own=store.rm[lk],loc=own?(l.type==='lec'?own:'ауд. '+own):(l.room?l.room.replace('Зал №','Зал №').replace(' ЛК',' · ЛК'):LOC[l.s].short),k=key(l),hw=store.hw[k];
@@ -337,6 +421,7 @@ function render(){
   const sub=l.w?`<em>${l.w===2?'чет':'нечет'}</em>`:'';
   const foot=editing===k?`<div class="ed"><textarea id="hwT" placeholder="Что задали">${esc(hw||'')}</textarea><div><button data-a="cancel">Отмена</button>${hw?'<button data-a="del">Удалить</button>':''}<button class="ok" data-a="save" data-k="${k}">Сохранить</button></div></div>`
    :`<button class="add" data-a="edit" data-k="${k}">${plus}${hw?'Изменить домашнее задание':'Добавить домашнее задание'}</button>`;
+  if(tm)return `${brk}<div class="row${state}"><div class="t"><b>${l.t[0]}</b><span>${l.t[3]}</span></div><div class="c"><div class="cb"><h3>${s[0]}${sub}</h3><span class="tag ${t[1]}">${t[0]}</span><br><span class="gtag">${l.st?'поток '+l.st:'гр. '+l.gs.join(', ')}</span><br><span class="loc">${pin}${esc(l.room?l.room.replace(' ЛК',' · ЛК'):LOC[l.s].short)}</span></div></div></div>`;
   return `${brk}<div class="row${state}"><div class="t"><b>${l.t[0]}</b><span>${l.t[3]}</span></div><div class="c"><div class="cb"><h3>${s[0]}${sub}</h3><span class="tag ${t[1]}">${t[0]}</span>${teachLine(l)}<button class="loc" data-a="loc" data-s="${l.s}" data-ty="${l.type}" data-room="${l.room||''}">${pin}${esc(loc)}<i>›</i></button>${hw&&editing!==k?`<p class="hw">${esc(hw)}</p>`:''}</div>${foot}</div></div>`}).join('');
  if(editing){const ta=$('hwT');if(ta)ta.focus()}
 }
@@ -355,7 +440,9 @@ function variants(s,ty,room){
  const vs=LF[s].map(v=>({...v}));const own=store.rm[lk]||'';const n=parseInt(own,10);
  if(n>=100&&n<1000){const f=Math.floor(n/100),b=vs[0].b;let v=vs.find(x=>x.b===b&&x.f===f);if(!v){v={b,f,rooms:[]};vs.push(v)}v.own=n}
  return vs}
-function openL(s,ty,room){lk=group+'|'+s+'|'+(ty==='lec'?'lec':'pr');pv={s,ty,room,vs:variants(s,ty,room)};
+function openRoom(b,f,r,hall){lk=null;pv={room:true,vs:[hall?{b,f:0,blocks:[hall],lec:1,focusHall:1}:{b,f,rooms:[r],focus:r}],i:0};sel2=null;
+ $('lsheet').classList.add('lroom');$('lsheet').classList.add('open');drawPlan(true)}
+function openL(s,ty,room){$('lsheet').classList.remove('lroom');lk=group+'|'+s+'|'+(ty==='lec'?'lec':'pr');pv={s,ty,room,vs:variants(s,ty,room)};
  let i=pv.vs.findIndex(v=>v.own);pv.i=i<0?0:i;sel2=null;
  $('lCustom').value=store.rm[lk]||'';
  $('lsheet').classList.add('open');drawPlan(true)}
@@ -366,7 +453,7 @@ function floorRooms(v){if(!v.rooms)return null;const set=new Set();
 function drawPlan(fit){const v=pv.vs[pv.i],bb=B[v.b],mine=new Set(v.rooms||[]);
  $('lTitle').textContent=BS[v.b]+(v.f?' · этаж '+v.f:'')+(v.lec?' · '+v.blocks[0]:'');
  $('lSub').textContent=bb[0]+', НГМУ · '+bb[1];
- const lbl=sel2?('ауд. '+sel2+(v.f?' · этаж '+v.f:'')):v.own?('ауд. '+v.own+(v.f?' · этаж '+v.f:'')):v.lec?(v.blocks[0]+' · '+BS[v.b]):v.rooms&&v.rooms.length?('ауд. '+fmtR(v.rooms)+(v.f?' · этаж '+v.f:'')):(S[pv.s][1]+(v.f?' · этаж '+v.f:''));
+ const lbl=v.focus&&!sel2?('ауд. '+v.focus+' ('+BS[v.b]+') · этаж '+v.f):v.focusHall?(v.blocks[0]+' ('+BS[v.b]+')'):sel2?('ауд. '+sel2+(v.f?' · этаж '+v.f:'')):v.own?('ауд. '+v.own+(v.f?' · этаж '+v.f:'')):v.lec?(v.blocks[0]+' · '+BS[v.b]):v.rooms&&v.rooms.length?('ауд. '+fmtR(v.rooms)+(v.f?' · этаж '+v.f:'')):(S[pv.s][1]+(v.f?' · этаж '+v.f:''));
  $('lPill').innerHTML=pin+'<span>'+esc(lbl)+'</span>';
  $('lFloors').innerHTML=pv.vs.length>1?pv.vs.map((x,j)=>`<button data-j="${j}" class="${j===pv.i?'on':''}">${BS[x.b]}${x.f?' · '+x.f+' эт.':''}</button>`).join(''):'';
  const W=88,H=86,C=50;let g='';const rooms=floorRooms(v);let width,height,hi=[];
@@ -377,16 +464,16 @@ function drawPlan(fit){const v=pv.vs[pv.i],bb=B[v.b],mine=new Set(v.rooms||[]);
  if(rooms){const top=rooms.filter(r=>r%2===0),bot=rooms.filter(r=>r%2===1);const n=Math.max(top.length,bot.length+2,6);width=n*W;
   const ty=0,cy=H+4,by=cy+C+4;height=by+H;
   g+=`<rect x="-6" y="${cy-2}" width="${width+12}" height="${C+4}" rx="6" fill="#253349"/>`;
-  const tcells=top.length?top:Array(n).fill('');const tw=width/tcells.length;tcells.forEach((r,j)=>{const up=(r!==''&&(r===v.own||r===sel2))?30:0;r===''?box(j*tw,ty,tw,H,'','',0):box(j*tw,ty-up,tw,H+up,r,r===sel2?'sel':r===v.own?'own':mine.has(r)?'dep':'',r)});
-  const cells=['Лестница',...bot,'Лестница'];const bw=width/cells.length;cells.forEach((r,j)=>typeof r==='number'?box(j*bw,by,bw,H,r,r===sel2?'sel':r===v.own?'own':mine.has(r)?'dep':'',r):box(j*bw,by,bw,H,r,'',0));
+  const tcells=top.length?top:Array(n).fill('');const tw=width/tcells.length;tcells.forEach((r,j)=>{const up=(r!==''&&(r===v.own||r===sel2))?30:0;r===''?box(j*tw,ty,tw,H,'','',0):box(j*tw,ty-up,tw,H+up,r,r===sel2?'sel':r===v.own||r===v.focus?'own':mine.has(r)&&!v.focus?'dep':'',r)});
+  const cells=['Лестница',...bot,'Лестница'];const bw=width/cells.length;cells.forEach((r,j)=>typeof r==='number'?box(j*bw,by,bw,H,r,r===sel2?'sel':r===v.own||r===v.focus?'own':mine.has(r)&&!v.focus?'dep':'',r):box(j*bw,by,bw,H,r,'',0));
   g+=`<circle cx="${bw/2}" cy="${by+H+2}" r="9" fill="#3aa36b"/><circle cx="${width-bw/2}" cy="${by+H+2}" r="9" fill="#3aa36b"/>`;
  }else{const name=v.blocks[0];width=W*4;height=H*2+C+8;
   g+=`<rect x="-6" y="${H+2}" width="${width+12}" height="${C+4}" rx="6" fill="#253349"/>`;
   box(0,0,W*2.6,H,name,'own',0);box(W*2.6,0,W*1.4,H,'','',0);box(0,H+C+8,W,H,'Лестница','',0);box(W,H+C+8,W*3,H,'','',0)}
  $('pg').innerHTML=g;pv.w=width;pv.h=height;pv.hi=hi;
  $('lMap').href='https://yandex.ru/maps/65/novosibirsk/?text='+encodeURIComponent('Новосибирск, '+bb[1]);
- const own=store.rm[lk];
- $('lNote').innerHTML=(v.lec?'Зал — из официального расписания; этаж зала в открытых источниках не указан.':rooms?'Номера — учебные аудитории дисциплины из официальной справки МТО НГМУ. Расположение на схеме условное: настоящих планов этажей в открытом доступе нет. Нажмите на аудиторию, чтобы отметить её своей.':'Номера кабинетов кафедра на сайте не публикует — схема показывает только корпус'+(v.f?' и этаж':'')+'.')+(own?' <a href="#" class="cl" id="lClear">Убрать свою аудиторию</a>':'');
+ const own=lk&&store.rm[lk];
+ $('lNote').innerHTML=pv.room?'Схема условная: поэтажных планов корпусов НГМУ в открытом доступе нет.':(v.lec?'Зал — из официального расписания; этаж зала в открытых источниках не указан.':rooms?'Номера — учебные аудитории дисциплины из официальной справки МТО НГМУ. Расположение на схеме условное: настоящих планов этажей в открытом доступе нет. Нажмите на аудиторию, чтобы отметить её своей.':'Номера кабинетов кафедра на сайте не публикует — схема показывает только корпус'+(v.f?' и этаж':'')+'.')+(own?' <a href="#" class="cl" id="lClear">Убрать свою аудиторию</a>':'');
  if(fit)fitView();else applyView()}
 function fitView(){const svg=$('plan'),Wv=svg.clientWidth,Hv=svg.clientHeight-170;const k=Math.min(Wv/(pv.w+30),Hv/(pv.h+30),.95);
  view.k=Math.max(k,.62);let cx=pv.w/2;
@@ -401,7 +488,7 @@ $('zIn').onclick=()=>zoomBy(1.3);$('zOut').onclick=()=>zoomBy(1/1.3);$('zFit').o
  svg.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,[e.clientX,e.clientY]);
   if(pinch&&pts.size===2){const[a,b]=[...pts.values()];const d=Math.hypot(a[0]-b[0],a[1]-b[1]);zoomBy(pinch.k*d/pinch.d/view.k);moved=9;return}
   if(drag){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;moved=Math.max(moved,Math.abs(dx)+Math.abs(dy));view.x=drag.vx+dx;view.y=drag.vy+dy;applyView()}});
- const up=e=>{pts.delete(e.pointerId);if(pts.size<2)pinch=null;if(!pts.size){if(moved<6){const t=document.elementFromPoint(e.clientX,e.clientY);const r=t&&t.closest&&t.closest('[data-r]');if(r){sel2=+r.dataset.r;$('lCustom').value=sel2;drawPlan(false)}}drag=null}};
+ const up=e=>{pts.delete(e.pointerId);if(pts.size<2)pinch=null;if(!pts.size){if(moved<6){const t=document.elementFromPoint(e.clientX,e.clientY);const r=t&&t.closest&&t.closest('[data-r]');if(r&&!pv.room){sel2=+r.dataset.r;$('lCustom').value=sel2;drawPlan(false)}}drag=null}};
  svg.addEventListener('pointerup',up);svg.addEventListener('pointercancel',up);
  svg.addEventListener('wheel',e=>{e.preventDefault();zoomBy(e.deltaY<0?1.15:1/1.15)},{passive:false});}
 $('lFloors').onclick=e=>{const b=e.target.closest('[data-j]');if(b){pv.i=+b.dataset.j;sel2=null;drawPlan(true)}};
@@ -423,24 +510,74 @@ $('tSave').onclick=()=>setT($('tCustom').value.trim()||store.tc[tk]||'');
 $('tReset').onclick=e=>{if(e.target.id==='tClear'){e.preventDefault();setT('')}};
 $('tclose').onclick=()=>$('tsheet').classList.remove('open');
 $('tsheet').onclick=e=>{if(e.target.id==='tsheet')$('tsheet').classList.remove('open')};
-const DEPS=[['А','Кафедра анатомии человека им. акад. Ю.И. Бородина','Анатомия'],['Б','Кафедра медицинской генетики и биологии','Биология'],['Х','Кафедра медицинской химии','Химия'],['ИР','Кафедра социально-исторических наук','История России'],['Я','Кафедра лингвистики и межкультурной коммуникации','Иностранный и латинский язык'],['БЖ','Кафедра нормальной физиологии и основ БЖ','Безопасность жизнедеятельности'],['Инф','Кафедра математики','Медицинская информатика'],['Фк','Кафедра физического воспитания','Физическая культура и спорт'],['Пс','Кафедра педагогики, психологии и социальной работы','Психология межличностной коммуникации'],['ОУ','Кафедра сестринского дела','Учебная практика «Основы ухода за больными»']];
-function renderT(){const q=$('q').value.trim().toLowerCase();
- $('tlist').innerHTML=DEPS.map(([k,d,subj])=>{const ppl=T[k].filter(([n,p])=>!q||n.toLowerCase().includes(q)||subj.toLowerCase().includes(q)||d.toLowerCase().includes(q));
-  if(!ppl.length)return'';return `<div class="dep"><h4>${subj}</h4><p>${d} · ${pl(T[k].length,'преподаватель','преподавателя','преподавателей')}<br>${B[LOC[k].b][0]}, ${B[LOC[k].b][1]}${LOC[k].rooms?' · ауд. '+LOC[k].rooms:''}</p><div class="ppl">${ppl.map(([n,p])=>`<div class="pp"><b>${n}</b><span>${p}</span></div>`).join('')}</div></div>`}).join('')||'<div class="empty"><b>Никого не нашлось</b>Попробуйте другую фамилию</div>'}
-$('q').oninput=renderT;
-const showTab=t=>{$('tabG').classList.toggle('on',t==='g');$('tabT').classList.toggle('on',t==='t');$('viewG').classList.toggle('hide',t!=='g');$('viewT').classList.toggle('hide',t!=='t');if(t==='t')renderT()};
-$('tabG').onclick=()=>showTab('g');$('tabT').onclick=()=>showTab('t');
-const gbtn=(a,b)=>R(a,b).map(g=>`<button data-g="${g}" class="${g===group?'on':''}">${g}</button>`).join('');
-const openSheet=()=>{$('g1').innerHTML=gbtn(1,12);$('g2').innerHTML=gbtn(13,22);$('sheet').classList.add('open')};
+const ALLT=(()=>{const m=new Map();for(const[k,arr]of Object.entries(T))for(const[n,p]of arr){if(!m.has(n))m.set(n,{p,subj:new Set()});m.get(n).subj.add(k==='Ял'?'Я':k)}return[...m].map(([n,v])=>({n,p:v.p,subj:[...v.subj].map(k=>k==='Я'?'Ин. яз. / латынь':S[k][0])})).sort((a,b)=>a.n.localeCompare(b.n,'ru'))})();
+let pk='g';
+function renderPicker(){const q=$('pkQ').value.trim().toLowerCase();
+ if(pk==='g'){$('pkList').innerHTML=R(1,22).filter(g=>!q||String(g).includes(q)||('группа '+g).includes(q)).map(g=>`<button data-g="${g}" class="${g===group?'on':''}">Группа ${g}<span>${g<=12?'I':'II'} поток</span></button>`).join('')||'<p class="ssub">Не найдено</p>'}
+ else{$('pkList').innerHTML=ALLT.filter(t=>!q||t.n.toLowerCase().includes(q)||t.subj.join(' ').toLowerCase().includes(q)).map(t=>`<button data-t="${esc(t.n)}" class="${t.n===teacher?'on':''}">${t.n}<span>${esc(t.subj.join(', '))}</span></button>`).join('')||'<p class="ssub">Не найдено</p>'}}
+const openSheet=()=>{pk=mode==='t'?'t':'g';$('pkTitle').textContent=pk==='t'?'Выбор преподавателя':'Выбор группы';$('pkLbl').textContent=pk==='t'?'Поиск преподавателя':'Поиск группы';$('pkQ').placeholder=pk==='t'?'Поиск: фамилия, имя или отчество':'Поиск: например, 5';$('pkQ').value='';renderPicker();$('sheet').classList.add('open');$('sheet').querySelector('.panel').scrollTop=0};
 const closeSheet=()=>$('sheet').classList.remove('open');
+$('pkQ').oninput=renderPicker;
 $('grpBtn').onclick=openSheet;$('close').onclick=closeSheet;
-$('sheet').onclick=e=>{const b=e.target.closest('[data-g]');if(b){group=+b.dataset.g;store.g=group;save();closeSheet();editing=null;render()}else if(e.target.id==='sheet')closeSheet()};
+const toast=t=>{const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>el.classList.remove('show'),2200)};
+$('sheet').onclick=e=>{const b=e.target.closest('[data-g],[data-t]');
+ if(b&&b.dataset.g){group=+b.dataset.g;store.g=group;save();closeSheet();editing=null;render();toast('Группа '+group)}
+ else if(b&&b.dataset.t){teacher=b.dataset.t;store.teacher=teacher;save();closeSheet();render();toast('Преподаватель: '+teacher)}
+ else if(e.target.id==='sheet')closeSheet()};
+const showTab=t=>{mode=t;$('tabG').classList.toggle('on',t==='g');$('tabT').classList.toggle('on',t==='t');editing=null;render()};
+$('tabG').onclick=()=>showTab('g');$('tabT').onclick=()=>{showTab('t');if(!teacher)openSheet()};
+// ---- нижняя навигация ----
+let page='s';
+function setPage(p){page=p;for(const b of document.querySelectorAll('.tb[data-tab]'))b.classList.toggle('on',b.dataset.tab===p);
+ $('pageS').classList.toggle('hide',p!=='s');$('pageM').classList.toggle('hide',p!=='m');$('pageA').classList.toggle('hide',p!=='a');
+ if(p==='m')renderMap();if(p==='a')renderAnn();window.scrollTo(0,0)}
+$('nav').onclick=e=>{const b=e.target.closest('[data-tab]');if(!b)return;const t=b.dataset.tab;
+ if(t==='i'){$('isheet').classList.add('open');return}
+ if(t==='s'&&page==='s'){sel=day0(new Date());editing=null;render();window.scrollTo({top:0,behavior:'smooth'});return}
+ setPage(t)};
+// ---- установка ----
+$('iNo').onclick=()=>$('isheet').classList.remove('open');
+$('isheet').onclick=e=>{if(e.target.id==='isheet')$('isheet').classList.remove('open');const r=e.target.closest('.arow');if(r)r.parentElement.classList.toggle('open')};
+$('iGo').onclick=()=>{const tg=window.Telegram&&Telegram.WebApp;
+ try{if(tg&&tg.addToHomeScreen&&tg.isVersionAtLeast&&tg.isVersionAtLeast('8.0')){tg.addToHomeScreen();return}}catch(e){}
+ const ios=/iPhone|iPad/.test(navigator.userAgent);document.querySelector(`[data-acc="${ios?'ios':'and'}"]`).classList.add('open');toast(ios?'Следуйте шагам для iPhone':'Следуйте шагам для Android')};
+// ---- карта ----
+const BORDER=['ЛК','УК5','УК6','ГК','ГКБ12','ГИКБ1'];
+const HALLS={ЛК:['Зал №1','Зал №2','Зал №3']};
+let mapB='ЛК',mapF=null;
+function bRooms(b){const fl=new Map();for(const[k,arr]of Object.entries(LF))for(const v of arr)if(v.b===b&&v.rooms){if(!fl.has(v.f))fl.set(v.f,new Set());v.rooms.forEach(r=>fl.get(v.f).add(r))}
+ for(const v of Object.values(fl))void v;return fl}
+const mineRooms=()=>new Set(Object.values(store.rm).map(x=>parseInt(x,10)).filter(Boolean));
+function renderMap(){const fl=bRooms(mapB);const floors=[...fl.keys()].sort((a,b)=>a-b);const halls=HALLS[mapB]||[];
+ const total=[...fl.values()].reduce((a,s)=>a+s.size,0)+halls.length;
+ if(mapF===null||(!fl.has(mapF)&&mapF!=='h'))mapF=floors.length?floors[0]:'h';
+ $('bTabs').innerHTML=BORDER.map(b=>`<button data-b="${b}" class="${b===mapB?'on':''}">${BS[b]}</button>`).join('');
+ $('bSub').textContent=B[mapB][1]+' · '+pl(total,'аудитория','аудитории','аудиторий');
+ $('fl').innerHTML=floors.map(f=>`<button data-f="${f}" class="${f===mapF?'on':''}">${f||'—'}</button>`).join('')+(halls.length?`<button data-f="h" class="${mapF==='h'?'on':''}">Залы</button>`:'');
+ const q=$('rq').value.trim().toLowerCase(),mine=mineRooms();
+ let items;
+ if(q){items=[];for(const b of BORDER){const f2=bRooms(b);for(const[f,set]of f2)for(const r of set)if(String(r).includes(q))items.push({b,f,r});for(const h of HALLS[b]||[])if(h.toLowerCase().includes(q))items.push({b,f:0,h})}}
+ else items=mapF==='h'?halls.map(h=>({b:mapB,f:0,h})):[...(fl.get(mapF)||[])].sort((a,b)=>a-b).map(r=>({b:mapB,f:mapF,r}));
+ $('rgrid').innerHTML=items.map(it=>it.h?`<button data-h="${it.h}" data-b="${it.b}">${it.h}</button>`:`<button data-r="${it.r}" data-b="${it.b}" data-f="${it.f}" class="${mine.has(it.r)?'mine':''}">${it.r}${q&&it.b!==mapB?` <small style="color:var(--mute);font-weight:600">${BS[it.b]}</small>`:''}</button>`).join('')||'<div class="none">Ничего не найдено</div>'}
+$('bTabs').onclick=e=>{const b=e.target.closest('[data-b]');if(b){mapB=b.dataset.b;mapF=null;renderMap();b.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'})}};
+$('fl').onclick=e=>{const b=e.target.closest('[data-f]');if(b){mapF=b.dataset.f==='h'?'h':+b.dataset.f;renderMap()}};
+$('rq').oninput=renderMap;
+$('rgrid').onclick=e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.h)openRoom(b.dataset.b,0,null,b.dataset.h);else openRoom(b.dataset.b,+b.dataset.f,+b.dataset.r)};
+// ---- объявления ----
+const ANN=[
+ {d:'23.11 15:20',t:'Добавлена вкладка «Карта»: все учебные аудитории 1 курса по корпусам и этажам, поиск по номеру и схема этажа.',all:1},
+ {d:'23.11 14:30',t:'Аудитории взяты из официальной справки о материально-техническом обеспечении программы «Стоматология» (new.ngmu.ru). Номер аудитории своей группы можно отметить на схеме — он сохранится.',all:1},
+ {d:'23.11 13:50',t:'Зачётные дни — 18–23 января.\nКаникулы — 25–31 января.\nПосле новогодних праздников занятия идут 9–16 января.',all:1},
+ {d:'23.11 13:45',t:'Факультатив «Русский язык как иностранный» проходит по расписанию кафедры и в сетку не включён.',all:1},
+ {d:'23.11 13:40',t:'Расписание 1 курса стоматологии перенесено со скана официального расписания: все 22 группы, чётные и нечётные недели, лекции потоков по номерам недель.\nЕсли заметите неточность — напишите боту.',all:1}];
+function renderAnn(){$('alist').innerHTML=ANN.map(a=>`<div class="an"><p>${esc(a.t)}</p><div><small>${a.d} · н</small><span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7.5" r="3.3"/><path d="M2.8 19.5c.4-3.6 2.9-5.6 6.2-5.6s5.8 2 6.2 5.6"/><circle cx="17.2" cy="8.6" r="2.6"/></svg>для всех групп</span></div></div>`).join('')}
 $('days').onclick=e=>{const b=e.target.closest('[data-i]');if(b){const m=monday(sel);sel=new Date(m);sel.setDate(m.getDate()+ +b.dataset.i);editing=null;render()}};
 const shift=k=>{sel=new Date(sel);sel.setDate(sel.getDate()+7*k);editing=null;render()};
 $('prev').onclick=()=>shift(-1);$('next').onclick=()=>shift(1);
-$('today').onclick=()=>{showTab('g');sel=day0(new Date());editing=null;render();window.scrollTo({top:0,behavior:'smooth'})};
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSheet();$('tsheet').classList.remove('open');$('lsheet').classList.remove('open')}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSheet();$('isheet').classList.remove('open');$('tsheet').classList.remove('open');$('lsheet').classList.remove('open')}});
 if(!store.g)openSheet();
+if(location.hash==='#map')setPage('m');
 render();setInterval(()=>{if(!editing)render()},30000);
 }
 </script>
