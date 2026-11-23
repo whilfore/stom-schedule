@@ -47,6 +47,19 @@ button:focus-visible,textarea:focus-visible{outline:2px solid var(--acc);outline
 #fl{display:flex;gap:8px;flex-wrap:wrap}
 #fl button{min-width:42px;height:42px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-weight:700;font-size:15px;color:var(--mute)}
 #fl button.on{background:#4f97dd;border-color:#4f97dd;color:#fff}
+.bcard{margin-top:14px;padding:14px 16px;border-radius:18px;background:var(--card);border:1px solid var(--line)}
+.bcard b,.wb b{display:block;font-size:16px}.bcard span,.wb span{display:block;margin-top:3px;font-size:13.5px;color:var(--mute)}
+.routes{display:flex;gap:8px;margin-top:12px}.routes a{flex:1;height:40px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:var(--pill);color:#62a6ec;font-weight:700;font-size:14px;text-decoration:none}
+.sl{margin:20px 2px 8px;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.sc{display:block;width:100%;text-align:left;margin-bottom:8px;padding:13px 15px;border-radius:16px;background:var(--card);border:1px solid var(--line);color:var(--ink);font-family:inherit;cursor:pointer}
+.sc div:first-child{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.sc b{font-size:15.5px}.sc em{font-style:normal;font-size:12.5px;color:var(--mute);flex:none}
+.sc>span{display:block;margin-top:2px;font-size:13px;color:var(--mute)}.sc p{margin:8px 0 0;font-size:14.5px;font-weight:700;color:#62a6ec}
+.sc .sm{margin-top:8px;font-size:12.5px;color:#5fd194;display:flex;gap:10px;flex-wrap:wrap}.sc .sm i{font-style:normal;color:#e9a24a}
+.sc.hall{cursor:default}.sc.hall p{color:var(--ink);font-weight:600;font-size:13.5px}
+.none{text-align:center;color:var(--mute);padding:24px 8px}
+.wsub{margin:4px 0 14px;color:var(--mute);font-size:13.5px}.wb{padding:14px 15px;border-radius:16px;background:var(--card);border:1px solid var(--line);margin-bottom:8px}
+.wr{margin:10px 0 0;font-size:15px;font-weight:700;color:#62a6ec}.wr i{display:block;font-style:normal;font-size:11.5px;font-weight:700;letter-spacing:.04em;color:var(--mute);margin-bottom:3px}
+.wn{font-size:12.5px;color:var(--mute);margin:6px 2px 0}.wclr{border:0;background:none;color:#e06c6c;font:600 14px inherit;font-family:inherit;margin-top:10px;padding:4px 2px;cursor:pointer}
 .rgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
 .rgrid button{height:46px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-weight:700;font-size:15px}
 .rgrid button.mine{border-color:#3b6ea3;color:#7ab6f2}
@@ -195,11 +208,10 @@ button.loc{border:0;font-family:inherit;cursor:pointer}
 </div>
 <div id="pageM" class="hide">
   <div class="btabs" id="bTabs"></div>
-  <p class="bsub" id="bSub"></p>
-  <label class="sbox"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="rq" placeholder="Поиск: например, 441" autocomplete="off" inputmode="search"></label>
-  <div class="frow"><span>ЭТАЖ</span><div id="fl"></div></div>
-  <div class="rgrid" id="rgrid"></div>
-  <p class="src">Аудитории — из справки о материально-техническом обеспечении программы 31.05.03 «Стоматология» (new.ngmu.ru). Схемы этажей условные: поэтажных планов корпусов НГМУ в открытом доступе нет.</p>
+  <div class="bcard" id="bCard"></div>
+  <label class="sbox"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="rq" placeholder="Номер аудитории или предмет" autocomplete="off" inputmode="search"></label>
+  <div id="bList"></div>
+  <p class="src">Адреса и номера аудиторий — из справки о материально-техническом обеспечении программы 31.05.03 «Стоматология» (new.ngmu.ru). Залы лекций — из официального расписания. В справке перечислены все аудитории кафедры; в какой из них занимается конкретная группа, там не указано — отметьте свою в карточке пары.</p>
 </div>
 <div id="pageA" class="hide">
   <h1 class="ah">Объявления</h1>
@@ -233,14 +245,10 @@ button.loc{border:0;font-family:inherit;cursor:pointer}
   </div>
 </div>
 <div class="sheet" id="tsheet" role="dialog" aria-modal="true" aria-label="Выбор преподавателя"><div class="panel"><div class="handle" style="margin:0 auto 6px"></div><button class="x" id="tclose" aria-label="Закрыть">✕</button><h2 id="tTitle">Преподаватель</h2><p id="tSub"></p><div class="ppl" id="tpick"></div><div class="cust"><input id="tCustom" placeholder="Другой преподаватель"><button id="tSave">Готово</button></div><p class="src" id="tReset"></p></div></div>
-<div class="plan" id="lsheet" role="dialog" aria-modal="true" aria-label="Схема этажа">
- <div class="ph"><div><h2 id="lTitle">ЛК · этаж 4</h2><p id="lSub"></p></div><button class="px" id="lclose" aria-label="Закрыть"><svg width="22" height="22" viewBox="0 0 22 22" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 4l14 14M18 4 4 18"/></svg></button></div>
- <div class="pbody"><div class="pchips"><span class="ppill" id="lPill"></span><div id="lFloors" class="floors"></div></div>
-  <svg id="plan" class="psvg" xmlns="http://www.w3.org/2000/svg"><g id="pg"></g></svg>
-  <div class="zoom"><button id="zIn" aria-label="Приблизить"><svg width="22" height="22" viewBox="0 0 22 22" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M11 3v16M3 11h16"/></svg></button><button id="zOut" aria-label="Отдалить"><svg width="22" height="22" viewBox="0 0 22 22" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 11h16"/></svg></button><button id="zFit" aria-label="Показать целиком"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 8V3h5M14 3h5v5M19 14v5h-5M8 19H3v-5"/></svg></button></div>
-  <div class="pfoot"><div class="prow"><a class="pbtn" id="lMap" href="#" target="_blank" rel="noopener">Яндекс Карты</a><input id="lCustom" placeholder="Своя аудитория" inputmode="text"><button class="pbtn ok" id="lSave">Сохранить</button></div><p id="lNote"></p></div>
- </div>
-</div>
+<div class="sheet" id="wsheet" role="dialog" aria-modal="true" aria-label="Где проходит занятие"><div class="panel"><div class="handle" style="margin:0 auto 6px"></div><button class="x" id="wclose" aria-label="Закрыть">✕</button>
+ <h2 id="wTitle"></h2><p id="wSub" class="wsub"></p><div id="wBody"></div>
+ <div id="wOwn"><p class="slbl">Аудитория вашей группы</p><div class="cust"><input id="wIn" placeholder="Например, 441" autocomplete="off"><button class="ok" id="wSave">Сохранить</button></div><button class="wclr" id="wClr">Сбросить</button></div>
+</div></div>
 <script>
 {
 const S={
@@ -372,6 +380,7 @@ const monday=d=>{const x=day0(d);x.setDate(x.getDate()-((x.getDay()+6)%7));retur
 const $=id=>document.getElementById(id);
 const esc=s=>s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
 const TL={lec:['Лекция','lec'],pr:['Практика','pr'],ou:['Учебная практика','ou']};
+const locShort=k=>{const v=LF[k][0];return BS[v.b]+' · '+B[v.b][1].replace(/^ул\. /,'')};
 const pin='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21.5s-7-6.3-7-11.7a7 7 0 0 1 14 0c0 5.4-7 11.7-7 11.7z"/><circle cx="12" cy="9.8" r="2.4"/></svg>';
 const ICOG='<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="7.5" r="3.3"/><path d="M2.8 19.5c.4-3.6 2.9-5.6 6.2-5.6s5.8 2 6.2 5.6"/><circle cx="17.2" cy="8.6" r="2.6"/><path d="M16.8 13.9c2.6.2 4.2 2.1 4.5 5"/></svg>';
 const plus='<svg width="17" height="17" viewBox="0 0 20 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 2v16M2 10h16"/></svg>';
@@ -414,14 +423,14 @@ function render(){
  if(tm&&!Object.values(store.tc).includes(teacher)){$('status').innerHTML='';$('list').innerHTML=`<div class="empty"><b>Пары не назначены</b>НГМУ не публикует, кто ведёт какую группу. Отметьте этого преподавателя в карточке пары на вкладке «Группы» — и здесь появятся его занятия.</div>`;return}
  if(!ls.length){$('list').innerHTML=`<div class="empty"><b>${sel.getDay()===0?'Выходной':pr[0]==='off'?pr[1]:'Пар нет'}</b>Занятий в этот день нет</div>`;return}
  $('list').innerHTML=ls.map((l,i)=>{
-  const s=S[l.s],t=TL[l.type],lk=lkey(l),own=store.rm[lk],loc=own?(l.type==='lec'?own:'ауд. '+own):(l.room?l.room.replace('Зал №','Зал №').replace(' ЛК',' · ЛК'):LOC[l.s].short),k=key(l),hw=store.hw[k];
+  const s=S[l.s],t=TL[l.type],lk=lkey(l),own=store.rm[lk],loc=own?(l.type==='lec'?own:'ауд. '+own):(l.room?l.room.replace('Зал №','Зал №').replace(' ЛК',' · ЛК'):locShort(l.s)),k=key(l),hw=store.hw[k];
   let brk='';if(i){const gap=mins(l.t[0])-mins(ls[i-1].t[3]);
    if(gap>0){const c=i===curBrk;brk=`<div class="brk${c?' cur':''}">Перемена ${mm(gap)}${c?' · ещё '+mm(mins(l.t[0])-cur):''}</div>`}else brk='<div style="height:12px"></div>'}
   const state=isT&&mins(l.t[0])<=cur&&cur<mins(l.t[3])?' now':'';
   const sub=l.w?`<em>${l.w===2?'чет':'нечет'}</em>`:'';
   const foot=editing===k?`<div class="ed"><textarea id="hwT" placeholder="Что задали">${esc(hw||'')}</textarea><div><button data-a="cancel">Отмена</button>${hw?'<button data-a="del">Удалить</button>':''}<button class="ok" data-a="save" data-k="${k}">Сохранить</button></div></div>`
    :`<button class="add" data-a="edit" data-k="${k}">${plus}${hw?'Изменить домашнее задание':'Добавить домашнее задание'}</button>`;
-  if(tm)return `${brk}<div class="row${state}"><div class="t"><b>${l.t[0]}</b><span>${l.t[3]}</span></div><div class="c"><div class="cb"><h3>${s[0]}${sub}</h3><span class="tag ${t[1]}">${t[0]}</span><br><span class="gtag">${l.st?'поток '+l.st:'гр. '+l.gs.join(', ')}</span><br><span class="loc">${pin}${esc(l.room?l.room.replace(' ЛК',' · ЛК'):LOC[l.s].short)}</span></div></div></div>`;
+  if(tm)return `${brk}<div class="row${state}"><div class="t"><b>${l.t[0]}</b><span>${l.t[3]}</span></div><div class="c"><div class="cb"><h3>${s[0]}${sub}</h3><span class="tag ${t[1]}">${t[0]}</span><br><span class="gtag">${l.st?'поток '+l.st:'гр. '+l.gs.join(', ')}</span><br><span class="loc">${pin}${esc(l.room?l.room.replace(' ЛК',' · ЛК'):locShort(l.s))}</span></div></div></div>`;
   return `${brk}<div class="row${state}"><div class="t"><b>${l.t[0]}</b><span>${l.t[3]}</span></div><div class="c"><div class="cb"><h3>${s[0]}${sub}</h3><span class="tag ${t[1]}">${t[0]}</span>${teachLine(l)}<button class="loc" data-a="loc" data-s="${l.s}" data-ty="${l.type}" data-room="${l.room||''}">${pin}${esc(loc)}<i>›</i></button>${hw&&editing!==k?`<p class="hw">${esc(hw)}</p>`:''}</div>${foot}</div></div>`}).join('');
  if(editing){const ta=$('hwT');if(ta)ta.focus()}
 }
@@ -433,70 +442,25 @@ $('list').onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=
  else if(a==='save'){const v=$('hwT').value.trim();if(v)store.hw[b.dataset.k]=v;else delete store.hw[b.dataset.k];save();editing=null}
  else if(a==='del'){delete store.hw[editing];save();editing=null}
  render()};
-let lk=null,pv=null,sel2=null,view={k:1,x:0,y:0},ownNum='';
-const roomOwner=(b,f,n)=>{for(const[k,arr]of Object.entries(LF))for(const v of arr)if(v.b===b&&v.f===f&&v.rooms&&v.rooms.includes(n))return S[k][1];return''};
-function variants(s,ty,room){
- if(ty==='lec')return[{b:'ЛК',f:0,blocks:[room.replace(' ЛК','')],lec:1}];
- const vs=LF[s].map(v=>({...v}));const own=store.rm[lk]||'';const n=parseInt(own,10);
- if(n>=100&&n<1000){const f=Math.floor(n/100),b=vs[0].b;let v=vs.find(x=>x.b===b&&x.f===f);if(!v){v={b,f,rooms:[]};vs.push(v)}v.own=n}
- return vs}
-function openRoom(b,f,r,hall){lk=null;pv={room:true,vs:[hall?{b,f:0,blocks:[hall],lec:1,focusHall:1}:{b,f,rooms:[r],focus:r}],i:0};sel2=null;
- $('lsheet').classList.add('lroom');$('lsheet').classList.add('open');drawPlan(true)}
-function openL(s,ty,room){$('lsheet').classList.remove('lroom');lk=group+'|'+s+'|'+(ty==='lec'?'lec':'pr');pv={s,ty,room,vs:variants(s,ty,room)};
- let i=pv.vs.findIndex(v=>v.own);pv.i=i<0?0:i;sel2=null;
- $('lCustom').value=store.rm[lk]||'';
- $('lsheet').classList.add('open');drawPlan(true)}
+let lk=null,wS=null;
+const ymap=a=>'https://yandex.ru/maps/65/novosibirsk/?text='+encodeURIComponent('Новосибирск, '+a);
+const gmap=a=>'https://2gis.ru/novosibirsk/search/'+encodeURIComponent(a);
 const fmtR=a=>{const r=[...a].sort((x,y)=>x-y),o=[];for(let i=0;i<r.length;){let j=i;while(j+1<r.length&&r[j+1]===r[j]+1)j++;o.push(j-i>=2?r[i]+'–'+r[j]:j>i?r[i]+', '+r[j]:''+r[i]);i=j+1}return o.join(', ')};
-function floorRooms(v){if(!v.rooms)return null;const set=new Set();
- for(const arr of Object.values(LF))for(const x of arr)if(x.b===v.b&&x.f===v.f&&x.rooms)x.rooms.forEach(r=>set.add(r));
- v.rooms.forEach(r=>set.add(r));if(v.own)set.add(v.own);return[...set].sort((a,b)=>b-a)}
-function drawPlan(fit){const v=pv.vs[pv.i],bb=B[v.b],mine=new Set(v.rooms||[]);
- $('lTitle').textContent=BS[v.b]+(v.f?' · этаж '+v.f:'')+(v.lec?' · '+v.blocks[0]:'');
- $('lSub').textContent=bb[0]+', НГМУ · '+bb[1];
- const lbl=v.focus&&!sel2?('ауд. '+v.focus+' ('+BS[v.b]+') · этаж '+v.f):v.focusHall?(v.blocks[0]+' ('+BS[v.b]+')'):sel2?('ауд. '+sel2+(v.f?' · этаж '+v.f:'')):v.own?('ауд. '+v.own+(v.f?' · этаж '+v.f:'')):v.lec?(v.blocks[0]+' · '+BS[v.b]):v.rooms&&v.rooms.length?('ауд. '+fmtR(v.rooms)+(v.f?' · этаж '+v.f:'')):(S[pv.s][1]+(v.f?' · этаж '+v.f:''));
- $('lPill').innerHTML=pin+'<span>'+esc(lbl)+'</span>';
- $('lFloors').innerHTML=pv.vs.length>1?pv.vs.map((x,j)=>`<button data-j="${j}" class="${j===pv.i?'on':''}">${BS[x.b]}${x.f?' · '+x.f+' эт.':''}</button>`).join(''):'';
- const W=88,H=86,C=50;let g='';const rooms=floorRooms(v);let width,height,hi=[];
- const box=(x,y,w,h,label,st,id)=>{const on=st==='own'||st==='sel',dep=st==='dep';
-  g+=`<g ${id?`data-r="${id}"`:''} style="cursor:${id?'pointer':'default'}"><rect x="${x+3}" y="${y+4}" width="${w-6}" height="${h-6}" rx="6" fill="#1a2230" opacity=".7"/><rect x="${x+2}" y="${y+2}" width="${w-4}" height="${h-4}" rx="6" fill="${on?'#22344d':dep?'#1f2d42':'#1f2838'}" stroke="${on?'#5aa3ec':dep?'#36597f':'#2f3b4e'}" stroke-width="${on?4:1.6}"/>`+
-  (st==='own'?`<circle cx="${x+w/2}" cy="${y+h/2}" r="${Math.min(w,h)*.36}" fill="none" stroke="#5a8fc8" stroke-width="2"/>`:'')+
-  `<text x="${x+w/2}" y="${y+h/2+8}" text-anchor="middle" font-size="${String(label).length>8?15:23}" font-weight="700" fill="${on?'#7ab6f2':'#e9eef5'}" font-family="-apple-system,Inter,sans-serif">${esc(String(label))}</text></g>`;if(on||dep)hi.push([x,y,w,h,on])};
- if(rooms){const top=rooms.filter(r=>r%2===0),bot=rooms.filter(r=>r%2===1);const n=Math.max(top.length,bot.length+2,6);width=n*W;
-  const ty=0,cy=H+4,by=cy+C+4;height=by+H;
-  g+=`<rect x="-6" y="${cy-2}" width="${width+12}" height="${C+4}" rx="6" fill="#253349"/>`;
-  const tcells=top.length?top:Array(n).fill('');const tw=width/tcells.length;tcells.forEach((r,j)=>{const up=(r!==''&&(r===v.own||r===sel2))?30:0;r===''?box(j*tw,ty,tw,H,'','',0):box(j*tw,ty-up,tw,H+up,r,r===sel2?'sel':r===v.own||r===v.focus?'own':mine.has(r)&&!v.focus?'dep':'',r)});
-  const cells=['Лестница',...bot,'Лестница'];const bw=width/cells.length;cells.forEach((r,j)=>typeof r==='number'?box(j*bw,by,bw,H,r,r===sel2?'sel':r===v.own||r===v.focus?'own':mine.has(r)&&!v.focus?'dep':'',r):box(j*bw,by,bw,H,r,'',0));
-  g+=`<circle cx="${bw/2}" cy="${by+H+2}" r="9" fill="#3aa36b"/><circle cx="${width-bw/2}" cy="${by+H+2}" r="9" fill="#3aa36b"/>`;
- }else{const name=v.blocks[0];width=W*4;height=H*2+C+8;
-  g+=`<rect x="-6" y="${H+2}" width="${width+12}" height="${C+4}" rx="6" fill="#253349"/>`;
-  box(0,0,W*2.6,H,name,'own',0);box(W*2.6,0,W*1.4,H,'','',0);box(0,H+C+8,W,H,'Лестница','',0);box(W,H+C+8,W*3,H,'','',0)}
- $('pg').innerHTML=g;pv.w=width;pv.h=height;pv.hi=hi;
- $('lMap').href='https://yandex.ru/maps/65/novosibirsk/?text='+encodeURIComponent('Новосибирск, '+bb[1]);
- const own=lk&&store.rm[lk];
- $('lNote').innerHTML=pv.room?'Схема условная: поэтажных планов корпусов НГМУ в открытом доступе нет.':(v.lec?'Зал — из официального расписания; этаж зала в открытых источниках не указан.':rooms?'Номера — учебные аудитории дисциплины из официальной справки МТО НГМУ. Расположение на схеме условное: настоящих планов этажей в открытом доступе нет. Нажмите на аудиторию, чтобы отметить её своей.':'Номера кабинетов кафедра на сайте не публикует — схема показывает только корпус'+(v.f?' и этаж':'')+'.')+(own?' <a href="#" class="cl" id="lClear">Убрать свою аудиторию</a>':'');
- if(fit)fitView();else applyView()}
-function fitView(){const svg=$('plan'),Wv=svg.clientWidth,Hv=svg.clientHeight-170;const k=Math.min(Wv/(pv.w+30),Hv/(pv.h+30),.95);
- view.k=Math.max(k,.62);let cx=pv.w/2;
- if(view.k*pv.w>Wv&&pv.hi.length){const pr=pv.hi.filter(a=>a[4]);const src=pr.length?pr:pv.hi;const xs=src.map(a=>a[0]+a[2]/2);cx=Math.min(Math.max((Math.min(...xs)+Math.max(...xs))/2,Wv/2/view.k),pv.w-Wv/2/view.k)}
- view.x=Wv/2-cx*view.k;view.y=90+Hv/2-pv.h/2*view.k;applyView()}
-function applyView(){$('pg').setAttribute('transform',`translate(${view.x},${view.y}) scale(${view.k})`)}
-const zoomBy=f=>{const svg=$('plan'),cx=svg.clientWidth/2,cy=svg.clientHeight/2;const k=Math.min(Math.max(view.k*f,.25),4);view.x=cx-(cx-view.x)*k/view.k;view.y=cy-(cy-view.y)*k/view.k;view.k=k;applyView()};
-$('zIn').onclick=()=>zoomBy(1.3);$('zOut').onclick=()=>zoomBy(1/1.3);$('zFit').onclick=()=>fitView();
-{const svg=$('plan');let drag=null,moved=0;const pts=new Map();let pinch=null;
- svg.addEventListener('pointerdown',e=>{svg.setPointerCapture(e.pointerId);pts.set(e.pointerId,[e.clientX,e.clientY]);moved=0;
-  if(pts.size===2){const[a,b]=[...pts.values()];pinch={d:Math.hypot(a[0]-b[0],a[1]-b[1]),k:view.k}}else drag={x:e.clientX,y:e.clientY,vx:view.x,vy:view.y}});
- svg.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,[e.clientX,e.clientY]);
-  if(pinch&&pts.size===2){const[a,b]=[...pts.values()];const d=Math.hypot(a[0]-b[0],a[1]-b[1]);zoomBy(pinch.k*d/pinch.d/view.k);moved=9;return}
-  if(drag){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;moved=Math.max(moved,Math.abs(dx)+Math.abs(dy));view.x=drag.vx+dx;view.y=drag.vy+dy;applyView()}});
- const up=e=>{pts.delete(e.pointerId);if(pts.size<2)pinch=null;if(!pts.size){if(moved<6){const t=document.elementFromPoint(e.clientX,e.clientY);const r=t&&t.closest&&t.closest('[data-r]');if(r&&!pv.room){sel2=+r.dataset.r;$('lCustom').value=sel2;drawPlan(false)}}drag=null}};
- svg.addEventListener('pointerup',up);svg.addEventListener('pointercancel',up);
- svg.addEventListener('wheel',e=>{e.preventDefault();zoomBy(e.deltaY<0?1.15:1/1.15)},{passive:false});}
-$('lFloors').onclick=e=>{const b=e.target.closest('[data-j]');if(b){pv.i=+b.dataset.j;sel2=null;drawPlan(true)}};
-const setL=v=>{if(v)store.rm[lk]=v;else delete store.rm[lk];save();pv.vs=variants(pv.s,pv.ty,pv.room);const i=pv.vs.findIndex(x=>x.own);if(i>=0)pv.i=i;sel2=null;drawPlan(true);render()};
-$('lSave').onclick=()=>setL($('lCustom').value.trim());
-$('lNote').onclick=e=>{if(e.target.id==='lClear'){e.preventDefault();$('lCustom').value='';setL('')}};
-$('lclose').onclick=()=>$('lsheet').classList.remove('open');
-window.addEventListener('resize',()=>{if($('lsheet').classList.contains('open'))fitView()});
+const routes=b=>`<div class="routes"><a href="${ymap(B[b][1])}" target="_blank" rel="noopener">Яндекс Карты</a><a href="${gmap(B[b][1])}" target="_blank" rel="noopener">2ГИС</a></div>`;
+const bBlock=(b,rooms,lbl)=>`<div class="wb"><b>${B[b][0]}</b><span>${B[b][1]}</span>${rooms?`<p class="wr"><i>${lbl}</i>${rooms}</p>`:''}${routes(b)}</div>`;
+function openL(s,ty,room){wS=s;lk=group+'|'+s+'|'+(ty==='lec'?'lec':'pr');const lec=ty==='lec';
+ $('wTitle').textContent=S[s][0]+(lec?' · лекция':'');
+ $('wSub').textContent=S[s][1]+' · группа '+group;
+ if(lec){$('wBody').innerHTML=bBlock('ЛК',esc(room.replace(' ЛК','')),'Зал по расписанию')+'<p class="wn">Зал указан в официальном расписании потока.</p>';$('wOwn').style.display='none'}
+ else{$('wBody').innerHTML=LF[s].map(v=>bBlock(v.b,fmtR(v.rooms),'Аудитории кафедры по справке')).join('')+(LF[s].length>1?'<p class="wn">Справка называет несколько корпусов для этой дисциплины.</p>':'');
+  $('wOwn').style.display='';$('wIn').value=store.rm[lk]||'';$('wClr').style.display=store.rm[lk]?'':'none'}
+ $('wsheet').classList.add('open')}
+const setL=v=>{if(v)store.rm[lk]=v;else delete store.rm[lk];save();$('wsheet').classList.remove('open');render();toast(v?'Аудитория сохранена':'Аудитория сброшена')};
+$('wSave').onclick=()=>setL($('wIn').value.trim());
+$('wIn').onkeydown=e=>{if(e.key==='Enter')setL($('wIn').value.trim())};
+$('wClr').onclick=()=>setL('');
+$('wclose').onclick=()=>$('wsheet').classList.remove('open');
+$('wsheet').onclick=e=>{if(e.target.id==='wsheet')$('wsheet').classList.remove('open')};
 let tk=null;
 function openT(s,ty){tk=group+'|'+s+'|'+(ty==='lec'?'lec':'pr');const cur=store.tc[tk]||'';
  $('tTitle').textContent=S[s][0];$('tSub').textContent=(ty==='lec'?'Лекции':'Практические занятия')+' · группа '+group+' · '+(S[s][1]||'');
@@ -543,31 +507,31 @@ $('iGo').onclick=()=>{const tg=window.Telegram&&Telegram.WebApp;
  const ios=/iPhone|iPad/.test(navigator.userAgent);document.querySelector(`[data-acc="${ios?'ios':'and'}"]`).classList.add('open');toast(ios?'Следуйте шагам для iPhone':'Следуйте шагам для Android')};
 // ---- карта ----
 const BORDER=['ЛК','УК5','УК6','ГК','ГКБ12','ГИКБ1'];
-const HALLS={ЛК:['Зал №1','Зал №2','Зал №3']};
-let mapB='ЛК',mapF=null;
-function bRooms(b){const fl=new Map();for(const[k,arr]of Object.entries(LF))for(const v of arr)if(v.b===b&&v.rooms){if(!fl.has(v.f))fl.set(v.f,new Set());v.rooms.forEach(r=>fl.get(v.f).add(r))}
- for(const v of Object.values(fl))void v;return fl}
-const mineRooms=()=>new Set(Object.values(store.rm).map(x=>parseInt(x,10)).filter(Boolean));
-function renderMap(){const fl=bRooms(mapB);const floors=[...fl.keys()].sort((a,b)=>a-b);const halls=HALLS[mapB]||[];
- const total=[...fl.values()].reduce((a,s)=>a+s.size,0)+halls.length;
- if(mapF===null||(!fl.has(mapF)&&mapF!=='h'))mapF=floors.length?floors[0]:'h';
+let mapB='ЛК';
+const lecHalls=()=>{const m=new Map();D.forEach((day,di)=>day.forEach(e=>{if(e.lec){const h=e.room.replace(' ЛК','');const k=h+'|'+e.st;if(!m.has(k))m.set(k,{h,st:e.st,days:new Set(),subs:new Set()});m.get(k).days.add(di);m.get(k).subs.add(S[e.s][0])}}));return[...m.values()]};
+const grpDays=(g,s)=>{const ds=new Set();D.forEach((day,di)=>day.forEach(e=>{if(!e.lec&&e.s===s&&e.g.includes(g))ds.add(di)}));return[...ds].sort().map(i=>DS[i])};
+function renderMap(){
  $('bTabs').innerHTML=BORDER.map(b=>`<button data-b="${b}" class="${b===mapB?'on':''}">${BS[b]}</button>`).join('');
- $('bSub').textContent=B[mapB][1]+' · '+pl(total,'аудитория','аудитории','аудиторий');
- $('fl').innerHTML=floors.map(f=>`<button data-f="${f}" class="${f===mapF?'on':''}">${f||'—'}</button>`).join('')+(halls.length?`<button data-f="h" class="${mapF==='h'?'on':''}">Залы</button>`:'');
- const q=$('rq').value.trim().toLowerCase(),mine=mineRooms();
- let items;
- if(q){items=[];for(const b of BORDER){const f2=bRooms(b);for(const[f,set]of f2)for(const r of set)if(String(r).includes(q))items.push({b,f,r});for(const h of HALLS[b]||[])if(h.toLowerCase().includes(q))items.push({b,f:0,h})}}
- else items=mapF==='h'?halls.map(h=>({b:mapB,f:0,h})):[...(fl.get(mapF)||[])].sort((a,b)=>a-b).map(r=>({b:mapB,f:mapF,r}));
- $('rgrid').innerHTML=items.map(it=>it.h?`<button data-h="${it.h}" data-b="${it.b}">${it.h}</button>`:`<button data-r="${it.r}" data-b="${it.b}" data-f="${it.f}" class="${mine.has(it.r)?'mine':''}">${it.r}${q&&it.b!==mapB?` <small style="color:var(--mute);font-weight:600">${BS[it.b]}</small>`:''}</button>`).join('')||'<div class="none">Ничего не найдено</div>'}
-$('bTabs').onclick=e=>{const b=e.target.closest('[data-b]');if(b){mapB=b.dataset.b;mapF=null;renderMap();b.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'})}};
-$('fl').onclick=e=>{const b=e.target.closest('[data-f]');if(b){mapF=b.dataset.f==='h'?'h':+b.dataset.f;renderMap()}};
+ const q=$('rq').value.trim().toLowerCase();
+ const subs=Object.keys(LF).filter(k=>k!=='Ял'||true);
+ const rowsFor=b=>subs.flatMap(k=>LF[k].filter(v=>v.b===b).map(v=>({k,rooms:v.rooms})));
+ const card=(b,k,rooms,showB)=>{const own=store.rm[group+'|'+k+'|pr'];const days=grpDays(group,k);
+  return `<button class="sc" data-s="${k}"><div><b>${S[k][0]}</b>${showB?`<em>${BS[b]}</em>`:''}</div><span>${S[k][1]}</span><p>ауд. ${fmtR(rooms)}</p>${days.length||own?`<div class="sm">${days.length?'Группа '+group+': '+days.join(', '):''}${own?`<i>ваша ауд. ${esc(own)}</i>`:''}</div>`:''}</button>`};
+ if(q){$('bCard').innerHTML='';$('bCard').style.display='none';const out=[];
+  for(const b of BORDER)for(const r of rowsFor(b)){const hit=r.rooms.some(n=>String(n).includes(q))||S[r.k][0].toLowerCase().includes(q)||S[r.k][1].toLowerCase().includes(q);if(hit)out.push(card(b,r.k,r.rooms,1))}
+  const hs=lecHalls().filter(x=>x.h.toLowerCase().includes(q)||'зал лекции'.includes(q));
+  $('bList').innerHTML=(out.join('')+hs.map(x=>hallCard(x,1)).join(''))||'<div class="none">Ничего не найдено. В справке нет такой аудитории у дисциплин 1 курса.</div>';return}
+ $('bCard').style.display='';const rs=rowsFor(mapB),n=new Set(rs.flatMap(r=>r.rooms.map(x=>x))).size;const hs=mapB==='ЛК'?lecHalls():[];
+ $('bCard').innerHTML=`<b>${B[mapB][0]}</b><span>${B[mapB][1]} · ${pl(n,'аудитория','аудитории','аудиторий')}${hs.length?' · '+pl(new Set(hs.map(x=>x.h)).size,'лекционный зал','лекционных зала','лекционных залов'):''}</span>${routes(mapB)}`;
+ $('bList').innerHTML=(hs.length?`<p class="sl">Лекции</p>`+hs.map(x=>hallCard(x)).join(''):'')+`<p class="sl">Практические занятия</p>`+rs.map(r=>card(mapB,r.k,r.rooms)).join('')}
+const hallCard=(x,showB)=>`<div class="sc hall"><div><b>${x.h}</b>${showB?'<em>ЛК</em>':''}</div><span>Поток ${x.st} (группы ${x.st===1?'1–12':'13–22'}) · ${[...x.days].sort().map(i=>DS[i]).join(', ')}</span><p>${[...x.subs].join(', ')}</p>${st(group)===x.st?'<div class="sm">Ваш поток</div>':''}</div>`;
+$('bTabs').onclick=e=>{const b=e.target.closest('[data-b]');if(b){mapB=b.dataset.b;$('rq').value='';renderMap();b.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'})}};
 $('rq').oninput=renderMap;
-$('rgrid').onclick=e=>{const b=e.target.closest('button');if(!b)return;
- if(b.dataset.h)openRoom(b.dataset.b,0,null,b.dataset.h);else openRoom(b.dataset.b,+b.dataset.f,+b.dataset.r)};
+$('bList').onclick=e=>{const b=e.target.closest('[data-s]');if(b)openL(b.dataset.s,'pr','')};
 // ---- объявления ----
 const ANN=[
- {d:'23.11 15:20',t:'Добавлена вкладка «Карта»: все учебные аудитории 1 курса по корпусам и этажам, поиск по номеру и схема этажа.',all:1},
- {d:'23.11 14:30',t:'Аудитории взяты из официальной справки о материально-техническом обеспечении программы «Стоматология» (new.ngmu.ru). Номер аудитории своей группы можно отметить на схеме — он сохранится.',all:1},
+ {d:'23.11 22:50',t:'Условные схемы этажей убраны: поэтажных планов корпусов НГМУ в открытом доступе нет. Вместо них во вкладке «Карта» — корпуса с адресами и маршрутом в Яндекс Картах и 2ГИС, аудитории кафедр по справке и залы лекций по расписанию.',all:1},
+ {d:'23.11 14:30',t:'Аудитории взяты из официальной справки о материально-техническом обеспечении программы «Стоматология» (new.ngmu.ru). Номер аудитории своей группы можно отметить в карточке пары — он сохранится.',all:1},
  {d:'23.11 13:50',t:'Зачётные дни — 18–23 января.\nКаникулы — 25–31 января.\nПосле новогодних праздников занятия идут 9–16 января.',all:1},
  {d:'23.11 13:45',t:'Факультатив «Русский язык как иностранный» проходит по расписанию кафедры и в сетку не включён.',all:1},
  {d:'23.11 13:40',t:'Расписание 1 курса стоматологии перенесено со скана официального расписания: все 22 группы, чётные и нечётные недели, лекции потоков по номерам недель.\nЕсли заметите неточность — напишите боту.',all:1}];
@@ -575,7 +539,7 @@ function renderAnn(){$('alist').innerHTML=ANN.map(a=>`<div class="an"><p>${esc(a
 $('days').onclick=e=>{const b=e.target.closest('[data-i]');if(b){const m=monday(sel);sel=new Date(m);sel.setDate(m.getDate()+ +b.dataset.i);editing=null;render()}};
 const shift=k=>{sel=new Date(sel);sel.setDate(sel.getDate()+7*k);editing=null;render()};
 $('prev').onclick=()=>shift(-1);$('next').onclick=()=>shift(1);
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSheet();$('isheet').classList.remove('open');$('tsheet').classList.remove('open');$('lsheet').classList.remove('open')}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSheet();$('isheet').classList.remove('open');$('tsheet').classList.remove('open');$('wsheet').classList.remove('open')}});
 if(!store.g)openSheet();
 if(location.hash==='#map')setPage('m');
 render();setInterval(()=>{if(!editing)render()},30000);
