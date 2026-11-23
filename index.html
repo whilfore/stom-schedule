@@ -461,19 +461,26 @@ $('list').onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;const l=
 
 // домашнее задание
 let hwPhoto=null,hwK=null;
-function hwPhotoUI(){$('hwPhoto').innerHTML=hwPhoto?`<div class="thumb"><img src="${hwPhoto}" alt="Прикреплённое фото"><button id="hwRm" aria-label="Убрать фото">${I.x}</button></div>`:`<button class="attach" id="hwAtt">${I.up}Прикрепить фото</button>`}
+function hwPhotoUI(){$('hwPhoto').innerHTML=hwPhoto?`<div class="thumb"><img src="${hwPhoto}" alt="Прикреплённое фото"><button id="hwRm" aria-label="Убрать фото">${I.x}</button></div>`:`<label class="attach" id="hwAtt" for="hwFile">${I.up}Прикрепить фото</label>`}
 function openHw(l){hwK=hkey(l);const s=S[l.s];
  $('hwTitle').innerHTML=esc(s[0])+parity(l);
  $('hwSub').innerHTML=`<b>${l.t[0]}</b> · ${DN[sel.getDay()]}, ${sel.getDate()} ${MN[sel.getMonth()].toLowerCase()}`;
  $('hwText').value=store.hw[hwK]||'';hwPhoto=store.hwp[hwK]||null;hwPhotoUI();
  const ex=!!(store.hw[hwK]||store.hwp[hwK]);$('hwSave').textContent=ex?'Сохранить':'Добавить';$('hwDel').hidden=!ex;
  openSheet('hwSheet');setTimeout(()=>$('hwText').focus(),250)}
-$('hwPhoto').onclick=e=>{if(e.target.closest('#hwAtt'))$('hwFile').click();else if(e.target.closest('#hwRm')){hwPhoto=null;hwPhotoUI()}};
-$('hwFile').onchange=()=>{const f=$('hwFile').files[0];$('hwFile').value='';if(!f)return;
- const img=new Image(),url=URL.createObjectURL(f);
- img.onload=()=>{const k=Math.min(1,1280/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);
-  c.getContext('2d').drawImage(img,0,0,c.width,c.height);hwPhoto=c.toDataURL('image/jpeg',.72);URL.revokeObjectURL(url);hwPhotoUI()};
- img.onerror=()=>{URL.revokeObjectURL(url);toast('Не удалось открыть фото')};img.src=url};
+$('hwPhoto').onclick=e=>{if(e.target.closest('#hwRm')){e.preventDefault();hwPhoto=null;hwPhotoUI()}};
+async function loadPhoto(f){
+ const draw=src=>{const w=src.naturalWidth||src.width,h=src.naturalHeight||src.height;if(!w||!h)throw 0;const k=Math.min(1,1280/Math.max(w,h)),c=document.createElement('canvas');
+  c.width=Math.round(w*k);c.height=Math.round(h*k);c.getContext('2d').drawImage(src,0,0,c.width,c.height);const d=c.toDataURL('image/jpeg',.72);if(d.length<100)throw 0;return d};
+ const viaImg=src=>new Promise((ok,no)=>{const i=new Image();i.onload=()=>{try{ok(draw(i))}catch(e){no(e)}};i.onerror=no;i.src=src});
+ try{if(window.createImageBitmap){const bm=await createImageBitmap(f);try{return draw(bm)}finally{bm.close&&bm.close()}}}catch(e){}
+ const u=URL.createObjectURL(f);try{return await viaImg(u)}catch(e){}finally{URL.revokeObjectURL(u)}
+ const dataUrl=await new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=no;r.readAsDataURL(f)});
+ return viaImg(dataUrl)}
+$('hwFile').onchange=async()=>{const inp=$('hwFile'),f=inp.files&&inp.files[0];if(!f)return;
+ $('hwPhoto').innerHTML='<div class="attach">Загрузка фото…</div>';
+ try{hwPhoto=await loadPhoto(f)}catch(e){toast(/hei[cf]/i.test(f.type+f.name)?'Формат HEIC не поддерживается — выберите JPEG':'Не удалось открыть фото')}
+ inp.value='';hwPhotoUI()};
 $('hwSave').onclick=()=>{const v=$('hwText').value.trim(),pv=store.hw[hwK],pp=store.hwp[hwK];
  if(v)store.hw[hwK]=v;else delete store.hw[hwK];if(hwPhoto)store.hwp[hwK]=hwPhoto;else delete store.hwp[hwK];
  if(!save()){if(pv)store.hw[hwK]=pv;else delete store.hw[hwK];if(pp)store.hwp[hwK]=pp;else delete store.hwp[hwK];toast('Не хватает места на устройстве для фото');return}
