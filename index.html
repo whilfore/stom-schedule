@@ -211,7 +211,6 @@ button.loc{border:0;font-family:inherit;cursor:pointer}
   <div class="bcard" id="bCard"></div>
   <label class="sbox"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="rq" placeholder="Номер аудитории или предмет" autocomplete="off" inputmode="search"></label>
   <div id="bList"></div>
-  <p class="src">Адреса и номера аудиторий — из справки о материально-техническом обеспечении программы 31.05.03 «Стоматология» (new.ngmu.ru). Залы лекций — из официального расписания. В справке перечислены все аудитории кафедры; в какой из них занимается конкретная группа, там не указано — отметьте свою в карточке пары.</p>
 </div>
 <div id="pageA" class="hide">
   <h1 class="ah">Объявления</h1>
@@ -241,7 +240,6 @@ button.loc{border:0;font-family:inherit;cursor:pointer}
     <h2 class="sh" id="pkTitle">Выбор группы</h2><p class="ssub">Выбор запомнится на этом устройстве</p>
     <p class="slbl" id="pkLbl">Поиск группы</p><input class="sin" id="pkQ" placeholder="Поиск: например, 5" autocomplete="off">
     <div class="plist" id="pkList"></div>
-    <div class="note">Перенесено со скана расписания (31.05.03 «Стоматология», 1 курс, 1 семестр 2026–2027). Занятия 01.09–30.12.2026 и 09.01–16.01.2027, зачётные дни 18.01–23.01, каникулы 25.01–31.01. Недели считаются от 31.08.2026, 1-я — нечётная. Составы кафедр — с ngmu.ru; кто ведёт конкретную группу, университет публично не указывает.</div>
   </div>
 </div>
 <div class="sheet" id="tsheet" role="dialog" aria-modal="true" aria-label="Выбор преподавателя"><div class="panel"><div class="handle" style="margin:0 auto 6px"></div><button class="x" id="tclose" aria-label="Закрыть">✕</button><h2 id="tTitle">Преподаватель</h2><p id="tSub"></p><div class="ppl" id="tpick"></div><div class="cust"><input id="tCustom" placeholder="Другой преподаватель"><button id="tSave">Готово</button></div><p class="src" id="tReset"></p></div></div>
@@ -420,7 +418,7 @@ function render(){
   else stat='<b>Занятия на сегодня закончились</b>'}
  $('status').innerHTML=stat?`<div class="status">${stat}</div>`:'';
  if(tm&&!teacher){$('status').innerHTML='';$('dc').textContent='';$('list').innerHTML='<div class="empty"><b>Выберите преподавателя</b>Нажмите на карточку выше</div>';return}
- if(tm&&!Object.values(store.tc).includes(teacher)){$('status').innerHTML='';$('list').innerHTML=`<div class="empty"><b>Пары не назначены</b>НГМУ не публикует, кто ведёт какую группу. Отметьте этого преподавателя в карточке пары на вкладке «Группы» — и здесь появятся его занятия.</div>`;return}
+ if(tm&&!Object.values(store.tc).includes(teacher)){$('status').innerHTML='';$('list').innerHTML=`<div class="empty"><b>Пары не назначены</b>Отметьте этого преподавателя в карточке пары на вкладке «Группы» — и здесь появятся его занятия.</div>`;return}
  if(!ls.length){$('list').innerHTML=`<div class="empty"><b>${sel.getDay()===0?'Выходной':pr[0]==='off'?pr[1]:'Пар нет'}</b>Занятий в этот день нет</div>`;return}
  $('list').innerHTML=ls.map((l,i)=>{
   const s=S[l.s],t=TL[l.type],lk=lkey(l),own=store.rm[lk],loc=own?(l.type==='lec'?own:'ауд. '+own):(l.room?l.room.replace('Зал №','Зал №').replace(' ЛК',' · ЛК'):locShort(l.s)),k=key(l),hw=store.hw[k];
@@ -451,8 +449,8 @@ const bBlock=(b,rooms,lbl)=>`<div class="wb"><b>${B[b][0]}</b><span>${B[b][1]}</
 function openL(s,ty,room){wS=s;lk=group+'|'+s+'|'+(ty==='lec'?'lec':'pr');const lec=ty==='lec';
  $('wTitle').textContent=S[s][0]+(lec?' · лекция':'');
  $('wSub').textContent=S[s][1]+' · группа '+group;
- if(lec){$('wBody').innerHTML=bBlock('ЛК',esc(room.replace(' ЛК','')),'Зал по расписанию')+'<p class="wn">Зал указан в официальном расписании потока.</p>';$('wOwn').style.display='none'}
- else{$('wBody').innerHTML=LF[s].map(v=>bBlock(v.b,fmtR(v.rooms),'Аудитории кафедры по справке')).join('')+(LF[s].length>1?'<p class="wn">Справка называет несколько корпусов для этой дисциплины.</p>':'');
+ if(lec){$('wBody').innerHTML=bBlock('ЛК',esc(room.replace(' ЛК','')),'Зал');$('wOwn').style.display='none'}
+ else{$('wBody').innerHTML=LF[s].map(v=>bBlock(v.b,fmtR(v.rooms),'Аудитории кафедры')).join('');
   $('wOwn').style.display='';$('wIn').value=store.rm[lk]||'';$('wClr').style.display=store.rm[lk]?'':'none'}
  $('wsheet').classList.add('open')}
 const setL=v=>{if(v)store.rm[lk]=v;else delete store.rm[lk];save();$('wsheet').classList.remove('open');render();toast(v?'Аудитория сохранена':'Аудитория сброшена')};
@@ -520,7 +518,7 @@ function renderMap(){
  if(q){$('bCard').innerHTML='';$('bCard').style.display='none';const out=[];
   for(const b of BORDER)for(const r of rowsFor(b)){const hit=r.rooms.some(n=>String(n).includes(q))||S[r.k][0].toLowerCase().includes(q)||S[r.k][1].toLowerCase().includes(q);if(hit)out.push(card(b,r.k,r.rooms,1))}
   const hs=lecHalls().filter(x=>x.h.toLowerCase().includes(q)||'зал лекции'.includes(q));
-  $('bList').innerHTML=(out.join('')+hs.map(x=>hallCard(x,1)).join(''))||'<div class="none">Ничего не найдено. В справке нет такой аудитории у дисциплин 1 курса.</div>';return}
+  $('bList').innerHTML=(out.join('')+hs.map(x=>hallCard(x,1)).join(''))||'<div class="none">Ничего не найдено</div>';return}
  $('bCard').style.display='';const rs=rowsFor(mapB),n=new Set(rs.flatMap(r=>r.rooms.map(x=>x))).size;const hs=mapB==='ЛК'?lecHalls():[];
  $('bCard').innerHTML=`<b>${B[mapB][0]}</b><span>${B[mapB][1]} · ${pl(n,'аудитория','аудитории','аудиторий')}${hs.length?' · '+pl(new Set(hs.map(x=>x.h)).size,'лекционный зал','лекционных зала','лекционных залов'):''}</span>${routes(mapB)}`;
  $('bList').innerHTML=(hs.length?`<p class="sl">Лекции</p>`+hs.map(x=>hallCard(x)).join(''):'')+`<p class="sl">Практические занятия</p>`+rs.map(r=>card(mapB,r.k,r.rooms)).join('')}
@@ -530,11 +528,8 @@ $('rq').oninput=renderMap;
 $('bList').onclick=e=>{const b=e.target.closest('[data-s]');if(b)openL(b.dataset.s,'pr','')};
 // ---- объявления ----
 const ANN=[
- {d:'23.11 22:50',t:'Условные схемы этажей убраны: поэтажных планов корпусов НГМУ в открытом доступе нет. Вместо них во вкладке «Карта» — корпуса с адресами и маршрутом в Яндекс Картах и 2ГИС, аудитории кафедр по справке и залы лекций по расписанию.',all:1},
- {d:'23.11 14:30',t:'Аудитории взяты из официальной справки о материально-техническом обеспечении программы «Стоматология» (new.ngmu.ru). Номер аудитории своей группы можно отметить в карточке пары — он сохранится.',all:1},
  {d:'23.11 13:50',t:'Зачётные дни — 18–23 января.\nКаникулы — 25–31 января.\nПосле новогодних праздников занятия идут 9–16 января.',all:1},
- {d:'23.11 13:45',t:'Факультатив «Русский язык как иностранный» проходит по расписанию кафедры и в сетку не включён.',all:1},
- {d:'23.11 13:40',t:'Расписание 1 курса стоматологии перенесено со скана официального расписания: все 22 группы, чётные и нечётные недели, лекции потоков по номерам недель.\nЕсли заметите неточность — напишите боту.',all:1}];
+ {d:'23.11 13:45',t:'Факультатив «Русский язык как иностранный» проходит по расписанию кафедры и в сетку не включён.',all:1}];
 function renderAnn(){$('alist').innerHTML=ANN.map(a=>`<div class="an"><p>${esc(a.t)}</p><div><small>${a.d} · н</small><span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7.5" r="3.3"/><path d="M2.8 19.5c.4-3.6 2.9-5.6 6.2-5.6s5.8 2 6.2 5.6"/><circle cx="17.2" cy="8.6" r="2.6"/></svg>для всех групп</span></div></div>`).join('')}
 $('days').onclick=e=>{const b=e.target.closest('[data-i]');if(b){const m=monday(sel);sel=new Date(m);sel.setDate(m.getDate()+ +b.dataset.i);editing=null;render()}};
 const shift=k=>{sel=new Date(sel);sel.setDate(sel.getDate()+7*k);editing=null;render()};
