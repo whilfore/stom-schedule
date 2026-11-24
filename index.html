@@ -621,7 +621,9 @@ try{const tw=window.Telegram&&Telegram.WebApp;if(tw&&tw.initData)fetch('https://
 let group=store.g||1,sel=day0(new Date());
 let mode=store.mode==='t'?'t':'g',teacher=store.teacher||'';
 const tg=window.Telegram&&window.Telegram.WebApp;
-const haptic=()=>{try{tg&&tg.HapticFeedback&&tg.HapticFeedback.selectionChanged()}catch(e){}};
+// лёгкая отдача при нажатии: самый мягкий «тик» Telegram, не чаще раза в 80 мс
+let hapT=0;const haptic=()=>{const n=Date.now();if(n-hapT<80)return;hapT=n;try{tg&&tg.HapticFeedback&&tg.HapticFeedback.selectionChanged()}catch(e){}};
+document.addEventListener('click',e=>{const b=e.target.closest('button,a,label,summary');if(b&&!b.disabled)haptic()},true);
 const ALLT=[...new Set(Object.values(T).flat().map(x=>x[0]))].sort((a,b)=>a.localeCompare(b,'ru'));
 const pkey=(g,l)=>NS()+g+'|'+l.s+'|'+(l.type==='lec'?'lec':'pr');
 const hkey=l=>NS()+group+'|'+ymd(sel)+'|'+(l.t[0]||l.s);
