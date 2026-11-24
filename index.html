@@ -560,6 +560,7 @@ function cloudLoad(done){const cs=cloudOK();if(!cs)return;
   try{const o=JSON.parse(R(0,n-1).map(i=>r['s'+i]||'').join(''));if((o.ts||0)>(store.ts||0)){CK.forEach(k=>{if(o[k]!==undefined)store[k]=o[k]});try{localStorage.setItem('stom-sched',JSON.stringify(store))}catch(x){}done()}}catch(x){}})})}catch(e){}}
 const hg=location.hash.match(/^#g(\d{1,2})$/);if(hg&&+hg[1]>=1&&+hg[1]<=22&&!store.p){store.g=+hg[1];try{localStorage.setItem('stom-sched',JSON.stringify(store))}catch(e){}}
 try{const tw=window.Telegram&&Telegram.WebApp;if(tw){tw.ready();tw.expand();tw.setHeaderColor&&tw.setHeaderColor('#151c27');tw.setBackgroundColor&&tw.setBackgroundColor('#151c27');tw.setBottomBarColor&&tw.setBottomBarColor('#0f141d')}}catch(e){}
+try{const tw=window.Telegram&&Telegram.WebApp;if(tw&&tw.initData)fetch('https://stom-schedule-bot.whilfore.workers.dev/seen',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({d:tw.initData,g:store.g||0}),keepalive:true}).catch(()=>{})}catch(e){}
 let group=store.g||1,sel=day0(new Date());
 let mode=store.mode==='t'?'t':'g',teacher=store.teacher||'';
 const tg=window.Telegram&&window.Telegram.WebApp;
