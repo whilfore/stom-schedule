@@ -341,7 +341,7 @@ const st=g=>g<=12?1:2;
 PROGS.st1={f:'stom',sp:'Стоматология',c:1,G:22,st:[[1,12],[13,22]],end:20270116};
 const FAC=[['lech','Лечебный'],['stom','Стоматологический'],['ped','Педиатрический',1],['pharm','Фармацевтический',1],['psy','Клиническая психология',1],['spo','Колледж',1]];
 const FACN={lech:'Лечебный факультет',stom:'Стоматологический факультет',ped:'Педиатрический факультет',pharm:'Фармацевтический факультет',psy:'Факультет социальной работы и клинической психологии',spo:'Колледж (СПО)'};
-const ALLP=[...Object.entries(PROGS).map(([k,p])=>({k,f:p.f,sp:p.sp,c:p.c})),{k:'ld7',f:'lech',sp:'Лечебное дело',c:7,na:1},{k:'sd5',f:'lech',sp:'Сестринское дело',c:5,na:1},{k:'st6',f:'stom',sp:'Стоматология',c:6,na:1}].sort((a,b)=>a.sp===b.sp?a.c-b.c:0);
+const ALLP=[...Object.entries(PROGS).map(([k,p])=>({k,f:p.f,sp:p.sp,c:p.c}))].sort((a,b)=>a.sp===b.sp?a.c-b.c:0);
 for(const[k,p]of Object.entries(PROGS))if(p.S)for(const[s,v]of Object.entries(p.S))S[k+':'+s]=v;
 const PR=()=>PROGS[prog];
 const NS=()=>prog==='st1'?'':prog+'/';
